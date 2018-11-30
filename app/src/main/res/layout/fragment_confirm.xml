@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:padding="10dp"
+    tools:context=".BookingFragment.ConfirmFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_bottom"
+            android:paddingTop="8dp"
+            android:paddingBottom="6dp"
+            android:id="@+id/ticket_head">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10/11/2018"
+                android:textSize="16sp"
+                android:paddingRight="4dp"
+                android:paddingEnd="4dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/date"
+                android:textColor="@color/colorPrimaryText"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bamenda -> Limbe"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="18sp"
+                android:layout_toRightOf="@id/date"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:id="@+id/ticket_location"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/ticket_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ticket_head"
+            android:background="@drawable/border_bottom"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone_number"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/identification"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/travel_agency"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Depature time"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/departure_date"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ticket_price"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/platform_charge"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"/>
+
+            </android.support.v7.widget.LinearLayoutCompat>
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mangi Elijah"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:id="@+id/name_ticket_holder"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="672084140"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:id="@+id/holder_number"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="000157329"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:id="@+id/holder_nid"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Garanti Express"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="16sp"
+                    android:id="@+id/agency_booked"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Morning"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:id="@+id/departure_time"
+                    android:paddingBottom="10dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="10/11/2018"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:id="@+id/departure_date"
+                    android:paddingBottom="10dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="5000FCFA"
+                    android:id="@+id/ticket_price"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="300FCFA"
+                    android:id="@+id/charge"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"/>
+            </android.support.v7.widget.LinearLayoutCompat>
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_below="@id/ticket_body"
+            android:background="@drawable/btn_primary_bk"
+            android:textColor="@color/white"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/btn_pay"
+            android:text="@string/book_this_trip"
+            android:textAllCaps="false"
+            android:textSize="20sp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

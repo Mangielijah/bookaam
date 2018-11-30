@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF9800</color>
+    <color name="colorPrimaryDark">#F57C00</color>
+    <color name="colorPrimaryLight">#FFE0B2</color>
+    <color name="colorAccent">#009688</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+    <color name="colorIcons">#212121</color>
+    <color name="colorDivider">#BDBDBD</color>
+    <color name="white">#ffffff</color>
+    <color name="tabIndicator">#fff1dd</color>
+    <color name="facebook_color">#3b5998</color>
+    <color name="google_color">#dc433d</color>
+</resources>

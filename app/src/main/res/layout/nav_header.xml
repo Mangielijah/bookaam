@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="196dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/nav_header_border"
+    android:padding="20dp"
+    android:orientation="vertical"
+    android:gravity="bottom">
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/bookaaam"
+        android:id="@+id/user_image"
+        android:layout_marginBottom="8dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_image"
+        android:text="mangielijah8@gmail.com"
+        android:textSize="14sp"
+        android:paddingTop="14dp"
+        app:fontFamily="@font/berlin_sans_fb_regular"
+        android:textColor="@color/colorSecondaryText"/>
+
+</RelativeLayout>

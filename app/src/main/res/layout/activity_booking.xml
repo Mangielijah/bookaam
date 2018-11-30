@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BookingActivityTest">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:background="@color/colorPrimary"
+        app:fontFamily="@font/berlin_sans_fb_regular"
+        android:theme="@style/AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        app:title="@string/app_name"
+        app:fontFamily="@font/berlin_sans_fb_regular"
+        app:titleTextColor="@color/white"/>
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/booking_nav_menu"
+        app:tabBackground="@color/colorPrimary"
+        app:tabTextColor="@color/white"
+        app:tabSelectedTextColor="@color/white"
+        android:layout_alignParentStart="true"
+        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorHeight="5dp"
+        android:layout_below="@+id/toolbar"
+        app:tabPaddingTop="5dp"
+        app:tabPaddingBottom="5dp"
+        android:layout_alignParentLeft="true">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/location_icon"/>
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/user_info_icon" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/confirm_icon" />
+    </android.support.design.widget.TabLayout>
+</android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/b_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar"/>
+
+</RelativeLayout>

@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">Bookaam</string>
+    <string name="book_tickets">BOOK TICKETS</string>
+    <string name="my_tickets">MY TICKETS</string>
+    <string name="history">HISTORY</string>
+    <string name="reviews">REVIEWS</string>
+    <string name="contact_feedback"><![CDATA[CONTACT & FEEDBACK]]></string>
+    <string name="share">SHARE</string>
+    <string name="faq">FAQ</string>
+    <string name="about_us">ABOUT US</string>
+    <string name="refund_policy">REFUND POLICY</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="book_your_bus">BOOK YOUR BUS</string>
+    <string name="book_now">BOOK NOW</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="messaging">MESSAGING</string>
+    <string name="location">LOCATION</string>
+    <string name="information">INFORMATION</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="agency">Agency</string>
+    <string name="fcfa">FCFA</string>
+    <string name="select_agency_from_the_list">select agency from the list</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="id_card_number_optional">Id card number (optional)</string>
+    <string name="submit">Submit</string>
+    <string name="next">Next</string>
+    <string name="time">Time</string>
+    <string name="price">Price</string>
+    <string name="departure_date">Departure date</string>
+    <string name="travel_route">Travel route</string>
+    <string name="identification">Identification</string>
+    <string name="travel_agency">Travel Agency</string>
+    <string name="ticket_price">Ticket price</string>
+    <string name="platform_charge">Platform charge</string>
+    <string name="book_this_trip">Book this trip</string>
+    <string name="pay_platform_charge">Pay platform charge</string>
+    <string name="fetching_agencies_available">Fetching agencies available</string>
+    <string name="fetching_routes_available">Fetching routes available</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="select_route">Select route</string>
+    <string name="title_activity_booking">BookingActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="trip_booked">Trip booked</string>
+    <string name="postpone_your_ticket">Postpone your ticket</string>
+    <string name="reactivate_your_ticket">Reactivate your ticket</string>
+    <string name="travel_time">Travel time</string>
+    <string name="select_time_and_day">Select time and day</string>
+    <string name="payment_info">Payment info</string>
+    <string name="momo_number">Momo number</string>
+    <string name="warning">Warning</string>
+    <string name="warning_text">Are you sure you want to postpone your ticket!</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="create_your_account">Create your account</string>
+    <string name="or">OR</string>
+    <string name="sign_in_with_facebook">Sign in with facebook</string>
+    <string name="sign_in_with_google">Sign in with google</string>
+
+    <string-array name="days_array">
+        <item>Today</item>
+        <item>Tomorrow</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/warning"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/border_bottom"
+        android:paddingBottom="4dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/warning_text"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="17sp"
+        android:textStyle="italic"
+        android:paddingBottom="4dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_primary_bk"
+            android:text="@string/yes"
+            android:id="@+id/btn_yes"
+            android:textColor="@color/white"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp" />
+        <Button
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_primary_bk"
+            android:text="@string/no"
+            android:id="@+id/btn_no"
+            android:textColor="@color/white"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"/>
+    </LinearLayout>
+
+</LinearLayout>

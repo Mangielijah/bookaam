@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
+    android:id="@+id/homeFragment"
+    tools:context=".HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/home_book_bus_button">
+
+        <TextView
+            android:id="@+id/groupname"
+            android:textColor="#000000"
+            android:textStyle="normal"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.2"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/bus"
+            android:layout_gravity="right|center"
+            tools:ignore="RtlHardcoded"
+            android:layout_weight="0.8"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:id="@+id/home_book_bus_button"
+        android:text="@string/book_your_bus"
+        android:drawableTop="@drawable/button_icon"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:gravity="center"
+        android:fontFamily="@font/berlin_sans_fb_regular"
+        android:textSize="20sp"
+        android:layout_above="@id/bottom_button"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_button"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:layout_width="0dp"
+            android:id="@+id/btn_my_tickets"
+            android:background="@drawable/home_button_border"
+            android:layout_height="96dp"
+            android:drawableTop="@drawable/btn_ticket_icon"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:gravity="center"
+            android:text="@string/my_tickets"
+            app:fontFamily="@font/berlin_sans_fb_regular"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/btn_history_icon"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:gravity="center"
+            android:text="@string/history"
+            app:fontFamily="@font/berlin_sans_fb_regular"
+            android:background="@color/white"
+            android:id="@+id/btn_history"/>
+    </LinearLayout>
+
+</RelativeLayout>
