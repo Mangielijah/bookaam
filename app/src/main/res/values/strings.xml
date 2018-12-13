@@ -66,5 +66,19 @@
         <item>Today</item>
         <item>Tomorrow</item>
     </string-array>
-
+    <string name="disclaimer">DISCLAIMER</string>
+    <string name="disclaimer_text">
+        Tickets booked are non refundable. The agency is not responsible for lateness that may result in failure to board a bus.
+    Once you pay for your ticket.\n<b>NB:</b> You shall only be allowed to board a bus when your ticket is validated by the agency.\n
+        You can only postpone your ticket for not more than 1 day.</string>
+    <string name="review_app">REVIEW APP</string>
+    <string name="book_a_classic_bus">BOOK A CLASSIC BUS</string>
+    <string name="book_a_vip_bus">BOOK A VIP BUS</string>
+    <string name="saving">Saving</string>
+    <string name="i_accept">I AGREE</string>
+    <string name="i_decline">DECLINE</string>
+    <string name="no_ticket">no ticket</string>
+    <string name="i_forgot_my_password">I forgot my password</string>
+    <string name="no_route_selected">No route selected</string>
+    <string name="code">Code</string>
 </resources>

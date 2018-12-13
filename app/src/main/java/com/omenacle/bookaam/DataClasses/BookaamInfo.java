@@ -13,17 +13,29 @@ public class BookaamInfo {
     //number
     private long n;
 
+    public long getVc() {
+        return vc;
+    }
+
+    public void setVc(long vc) {
+        this.vc = vc;
+    }
+
+    //Vip ticket charge
+    private long vc;
+
 
     public BookaamInfo(){
 
     }
 
-    public BookaamInfo(long c, String e, String p, String k, long n) {
+    public BookaamInfo(long c, String e, String p, String k, long n, long vc) {
         this.c = c;
         this.e = e;
         this.p = p;
         this.k = k;
         this.n = n;
+        this.vc = vc;
     }
 
 

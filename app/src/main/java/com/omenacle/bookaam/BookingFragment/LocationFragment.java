@@ -84,6 +84,8 @@ public class LocationFragment extends Fragment {
                     pd = new ProgressDialog(getContext());
                     pd.setTitle(getResources().getString(R.string.fetching_routes_available));
                     pd.setMessage(getResources().getString(R.string.please_wait));
+                    pd.setCancelable(true);
+                    pd.setCanceledOnTouchOutside(false);
                     pd.show();
                 }
 

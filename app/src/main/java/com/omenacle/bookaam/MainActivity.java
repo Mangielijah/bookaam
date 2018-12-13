@@ -65,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
+                    case R.id.nav_vip:
+                        BookVIPTicketFragment bookVIPTicketFragment = new BookVIPTicketFragment();
+                        setFragment(bookVIPTicketFragment, "book");
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
                     case R.id.nav_tickets:
                         MyTicketsFragment myTicketsFragment = new MyTicketsFragment();
                         setFragment(myTicketsFragment, "ticket");
@@ -83,13 +89,6 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
-                    case R.id.nav_contact:
-                        Toast.makeText(MainActivity.this, R.string.contact_feedback, Toast.LENGTH_SHORT).show();
-                        MessagingFragment messagingFragment = new MessagingFragment();
-                        setFragment(messagingFragment, "messaging");
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
                     case R.id.nav_share:
                         Toast.makeText(MainActivity.this, R.string.share, Toast.LENGTH_SHORT).show();
                         menuItem.setChecked(true);
@@ -100,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
+                    case R.id.nav_disclaimer:
+                        Toast.makeText(MainActivity.this, R.string.disclaimer, Toast.LENGTH_SHORT).show();
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
                     case R.id.nav_about:
                         Toast.makeText(MainActivity.this, R.string.about_us, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));

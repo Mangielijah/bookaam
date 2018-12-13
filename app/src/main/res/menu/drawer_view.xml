@@ -7,7 +7,11 @@
         <item
             android:id="@+id/nav_book"
             android:icon="@drawable/bus_icon"
-            android:title="@string/book_tickets"/>
+            android:title="@string/book_a_classic_bus"/>
+        <item
+            android:id="@+id/nav_vip"
+            android:title="@string/book_a_vip_bus"
+            android:icon="@drawable/bus_icon"/>
 
         <item
             android:id="@+id/nav_tickets"
@@ -18,10 +22,6 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/history_icon"
             android:title="@string/history"/>
-        <item
-            android:id="@+id/nav_contact"
-            android:title="@string/contact_feedback"
-            android:icon="@drawable/messenger_icon"/>
 
 
     </group>
@@ -30,7 +30,7 @@
         android:id="@+id/middle_nav_group">
         <item
             android:id="@+id/nav_review"
-            android:title="@string/reviews" />
+            android:title="@string/review_app" />
 
         <item
             android:id="@+id/nav_share"
@@ -44,13 +44,16 @@
     <group
         android:checkableBehavior="none"
         android:id="@+id/bottom_nav_group">
+        <item
+            android:id="@+id/nav_policy"
+            android:title="@string/refund_policy" />
+        <item
+            android:id="@+id/nav_disclaimer"
+            android:title="@string/disclaimer" />
 
         <item
             android:id="@+id/nav_about"
             android:title="@string/about_us" />
-        <item
-            android:id="@+id/nav_policy"
-            android:title="@string/refund_policy" />
 
         <item
             android:id="@+id/nav_logout"

@@ -4,7 +4,10 @@ package com.omenacle.bookaam.BookingFragment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.omenacle.bookaam.DataClasses.BranchInfo;
+import com.omenacle.bookaam.DataClasses.Ticket;
+import com.omenacle.bookaam.MyTicketViewModel;
 import com.omenacle.bookaam.OnGetFirebaseDataListener;
+import com.omenacle.bookaam.OnPaymentMade;
+import com.omenacle.bookaam.PaymentTask;
 import com.omenacle.bookaam.R;
 
 import org.json.JSONException;
@@ -32,14 +40,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okio.Timeout;
 
 import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_KEY;
 import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_NAME;
@@ -53,7 +53,7 @@ import static com.omenacle.bookaam.BookingActivity.ROUTE;
 public class ConfirmFragment extends Fragment {
 
 
-    public static String agency_name, agency_key, p_name, p_num, p_id, troute, email, pass;
+    public static String agency_name, agency_key, p_name, p_num, p_id, troute, email, pass, travelTime, travelDay;
     public static long tprice, tcharge, num;
     public String branchEmail, branchPass;
     public long branchNum;
@@ -76,8 +76,12 @@ public class ConfirmFragment extends Fragment {
     private static AppCompatTextView dateTravelTextView;
     private static AppCompatTextView priceTextView;
     private static AppCompatTextView chargeTextView;
+    public static String TICKET_CODE = "TICKET_CODE";
+    private String fareUrlRequest, chargeUrlRequest;
+    String ticketCode;
+    private SharedPreferences pref;
 
-    Request fareUrlRequest, chargeUrlRequest;
+    private MyTicketViewModel myTicketViewModel;
 
     public ConfirmFragment() {
         // Required empty public constructor
@@ -95,10 +99,20 @@ public class ConfirmFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        myTicketViewModel = ViewModelProviders.of(this).get(MyTicketViewModel.class);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("OnCreate", "On Create ConfirmFragment");
         ctx =  getContext();
+
+        //Ticket shared preference to store temporal ticket code to be used during transaction
+        pref = getActivity().getSharedPreferences("ticket", Context.MODE_PRIVATE);
+
         Bundle mBundle = this.getArguments();
         if(mBundle != null){
             agency_name = mBundle.getString(AGENCY_NAME);
@@ -185,28 +199,124 @@ public class ConfirmFragment extends Fragment {
 
                         //Payment of platform charge url
                         //chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
-                        chargeUrlRequest = paymentUrl(5, momoNumber, pass, email);
+                        chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
                         //Payment of ticket fare url
-                        fareUrlRequest = paymentUrl(tprice, momoNumber, branchPass, branchEmail);
-                        dialog.dismiss();
-                        pd = new ProgressDialog(ctx);
-                        pd.setTitle("Processing");
-                        pd.setMessage("Making platform charge payment\nDial *126# and confirm");
-                        pd.setCanceledOnTouchOutside(false);
-                        pd.setCancelable(false);
-                        pd.show();
-                        new Thread(new Runnable() {
+                        fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
+                        //Make ticket charge payment
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                        builder.setTitle(getResources().getString(R.string.disclaimer));
+                        builder.setMessage(getResources().getString(R.string.disclaimer_text)).
+
+                        setPositiveButton("I ACCEPT", new DialogInterface.OnClickListener() {
                             @Override
-                            public void run() {
-                                makePayment(chargeUrlRequest, "Platform charge");
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialog.dismiss();
+                                if (pref.contains(TICKET_CODE)){
+                                    //Process transport payment here
+                                    ticketCode = pref.getString(TICKET_CODE, null);
+                                    processTranPayment(fareUrlRequest, ticketCode);
+                                }else {
+                                    //Process fare payment first
+                                    PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
+                                        @Override
+                                        public void onCompleted(String response, String msg) {
+                                            Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                            Log.d("PaymentTask", response);
+                                            try {
+                                                JSONObject json = new JSONObject(response);
+                                                ticketCode = json.getString("TransactionID");
+                                                String status = json.getString("StatusCode");
+                                                Log.d("PaymentTaskStatus", status);
+                                                if(status.equals("01")){
+                                                    SharedPreferences.Editor editor = pref.edit();
+                                                    editor.putString(TICKET_CODE, ticketCode);
+                                                    editor.apply();
+                                                    processTranPayment(fareUrlRequest, ticketCode);
+                                                }
+                                                else {
+                                                    Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(String msg) {
+                                            Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                    chargeTask.execute();
+                                }
+
                             }
-                        }).start();
+                        }).setNegativeButton("DECLINE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
                 });
             }
         });
 
         return view;
+    }
+
+    private void processTranPayment(String fareUrlRequest, final String ticketCode) {
+        PaymentTask fareTask = new PaymentTask(ctx, fareUrlRequest, "Transport Fare", new OnPaymentMade() {
+            @Override
+            public void onCompleted(String response, String msg) {
+                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                JSONObject json = null;
+                try {
+                    json = new JSONObject(response);
+                    String status = json.getString("StatusCode");
+                    Log.d("PaymentTaskStatus", status);
+                    if(status.equals("01")){
+                        pd = new ProgressDialog(ctx);
+                        pd.setTitle(getResources().getString(R.string.saving));
+                        pd.setMessage(getResources().getString(R.string.please_wait));
+                        pd.setCancelable(true);
+                        pd.setCanceledOnTouchOutside(false);
+                        pd.show();
+
+                        Ticket mTicket = new Ticket(agency_key, getBranchKey(agency_key, troute), Long.parseLong(ticketCode), travelDay, p_name, Long.parseLong(p_num), Long.parseLong(p_id), troute, travelTime);
+
+                        //Sending ticket online to firebase
+                        sendTicketOnline(mTicket);
+
+                        //Sending to local storage using room database
+                        try{
+                            myTicketViewModel.insert(mTicket);
+                        }catch (Exception e){
+                            Log.d("Insert", "Error Inserting ticket: "+e.getMessage());
+                        }
+
+                        //deleting ticket code from shared preferences
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.remove(TICKET_CODE).apply();
+
+                    }
+                    else {
+                        Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                pd.dismiss();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+            }
+        });
+        fareTask.execute();
     }
 
     public interface OnConfirmTicketListener{
@@ -239,6 +349,8 @@ public class ConfirmFragment extends Fragment {
        num = bNum;
        email = bEmail;
        pass = bPass;
+       travelTime = time;
+
         nameTextView.setText(pName);
         numberTextView.setText(pNum);
         idTextView.setText(pId);
@@ -256,13 +368,17 @@ public class ConfirmFragment extends Fragment {
         Log.d("Date: ", formattedDateTom);
 
         if (day.toLowerCase().equals("today")) {
+            travelDay = formattedDateToday;
             dateTravelTextView.setText(formattedDateToday);
         } else if(day.toLowerCase().equals("tomorrow")){
+            travelDay = formattedDateTom;
             dateTravelTextView.setText(formattedDateTom);
+
         }
 
         dateTextView.setText(formattedDateToday);
     }
+
 
     void getBranchInfo(final OnGetFirebaseDataListener listener){
         listener.onStart();
@@ -284,112 +400,38 @@ public class ConfirmFragment extends Fragment {
     private String getBranchKey(String ak, String route){
 
         String location = null;
-        if(route.contains("->")){
-            String s[] = route.split("->");
-            if(s.length > 0){
-                Log.d("SplitTime1", s[0]);
-                Log.d("SplitTime1", s[1]);
-                location = s[0];
-            }
+        if(route == null){
+            Toast.makeText(ctx, getResources().getString(R.string.no_route_selected), Toast.LENGTH_SHORT).show();
+            return "";
         }
-        return ak+""+location;
+        else{
+
+            if(route.contains("->")){
+                String s[] = route.split("->");
+                if(s.length > 0){
+                    Log.d("SplitTime1", s[0]);
+                    Log.d("SplitTime1", s[1]);
+                    location = s[0];
+                }
+            }
+            return ak+""+location;
+
+        }
     }
 
 
-    //This function returns a request(OkHTTP) of the payment
-    private Request paymentUrl(long amount, String number, String p, String e){
+    //This function returns a request url of the payment
+    private String paymentUrl(long amount, String number, String p, String e){
 
-        String url  = "http://developer.mtn.cm/OnlineMomoWeb/faces/transaction/transactionRequest.xhtml" +
+        return "https://developer.mtn.cm/OnlineMomoWeb/faces/transaction/transactionRequest.xhtml" +
                 "?idbouton=2&typebouton=PAIE&_amount=" + amount + "&_tel=" + number + "&_clP=" + p +
                 "&_email=" + e + "&submit.x=104&submit.y=70";
 
-
-        Log.d("PaymentURL", url);
-
-        return new Request.Builder()
-                .url(url)
-                .build();
-
     }
 
-    private void makePayment(Request request, String reason){
-
-
-        OkHttpClient client = new OkHttpClient();
-
-        try {
-            Response response = client.newCall(request).execute();
-            if(!response.isSuccessful()){
-
-                Log.d("Response:", response.toString());
-                pd.dismiss();
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(ctx);
-                alertDialog.setTitle("Error");
-                alertDialog.setMessage("Could not complete payment");
-                alertDialog.show();
-
-            }else{
-
-                final String responseData = response.body().string();
-                JSONObject json = new JSONObject(responseData);
-                Log.d("ResponseJson", json.toString());
-
-            }
-        } catch (IOException e) {
-            Log.d("Error", e.getMessage());
-            e.printStackTrace();
-        } catch (JSONException e) {
-            Log.d("Error", e.getMessage());
-            e.printStackTrace();
-        }
-
-        // Get a handler that can be used to post to the main thread
-        /*client.newCall(request).enqueue(new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            pd.dismiss();
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(ctx);
-                            alertDialog.setTitle("Error");
-                            alertDialog.setMessage("Could not complete payment");
-                            alertDialog.show();
-                        }catch (Exception e){
-                            Log.d("ErrorUI", e.getMessage());
-                        }
-                    }
-                });
-
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                }else{
-                    Log.d("Response", response.body().string());
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject json = new JSONObject(responseData);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try{
-                                pd.setMessage("Done");
-                            }catch (Exception e){
-                                Log.d("ErrorUI", e.getMessage());
-                            }
-                        }
-                    });
-                }
-            }
-        });*/
+    private void sendTicketOnline(Ticket mTicket){
+        Log.d("Ticket:", mTicket.toString());
+        mDatabase.child("t").child(ticketCode).setValue(mTicket);
     }
+
 }

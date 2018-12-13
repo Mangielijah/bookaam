@@ -187,7 +187,7 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
                     break;
                 case 1:
                     setActionBarTitle("Enter your information");
-                    fragment = UserInfoFragment.newInstance(travelTime);
+                    fragment = new UserInfoFragment();
                     break;
                 case 2:
                     setActionBarTitle("Confirm and pay");
