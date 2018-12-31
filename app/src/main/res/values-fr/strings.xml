@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">Bookaam</string>
+    <string name="book_tickets">ACHETER DES BILLETS</string>
+    <string name="my_tickets">MES BILLETS</string>
+    <string name="history">HISTOIRE</string>
+    <string name="reviews">AVIS</string>
+    <string name="contact_feedback"><![CDATA[CONTACT & FEEDBACK]]></string>
+    <string name="share">PARTAGER</string>
+    <string name="faq">FAQ</string>
+    <string name="about_us">A PROPOS DE NOUS</string>
+    <string name="refund_policy">POLICIE DE REMBOURSMENT</string>
+    <string name="log_out">DÉCONNEXION</string>
+    <string name="book_your_bus">RESERVEZ VOTRE BUS</string>
+    <string name="book_now">RESERVEZ MAINTENANT</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello fragment vide</string>
+    <string name="messaging">MESSAGERIE</string>
+    <string name="location">EMPLACEMENT</string>
+    <string name="information">INFORMATION</string>
+    <string name="confirm">CONFIRMER</string>
+    <string name="agency">Agence</string>
+    <string name="fcfa">FCFA</string>
+    <string name="select_agency_from_the_list">choisissez l\'agence de la liste</string>
+    <string name="name">Nom</string>
+    <string name="phone_number">Numéro de téléphone</string>
+    <string name="id_card_number_optional">Numéro de carte d\'identité (optional)</string>
+    <string name="submit">Soumettre</string>
+    <string name="next">Suivant</string>
+    <string name="time">L\'heur</string>
+    <string name="price">Prix</string>
+    <string name="departure_date">Date de départ</string>
+    <string name="travel_route">Itinéraire de voyage</string>
+    <string name="identification">Identification</string>
+    <string name="travel_agency">Agence de voyage</string>
+    <string name="ticket_price">Prix de billet</string>
+    <string name="platform_charge">Frais de service</string>
+    <string name="book_this_trip">Réserver ce voyage</string>
+    <string name="pay_platform_charge">Payer le frais de service</string>
+    <string name="fetching_agencies_available">Recherche agences disponibles</string>
+    <string name="fetching_routes_available">Chercher des itinéraires disponibles</string>
+    <string name="please_wait">S\'il vous plaît soyez patient…</string>
+    <string name="select_route">Choisissez l\'itinéraire</string>
+    <string name="title_activity_booking">Activité de réservation</string>
+    <string name="action_settings">Réglages</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="trip_booked">Voyage réservé</string>
+    <string name="postpone_your_ticket">Reporter votre voyage</string>
+    <string name="reactivate_your_ticket">Réactiver vos billets</string>
+    <string name="travel_time">L\'heure de voyage</string>
+    <string name="select_time_and_day">Choisissez l\'heure et le jour</string>
+    <string name="payment_info">information de paiement</string>
+    <string name="momo_number">Numéro de Momo</string>
+    <string name="warning">Attention!</string>
+    <string name="warning_text">Êtes-vous sûr de vouloir reporter votre voyage?!</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="password">Mot de passe</string>
+    <string name="log_in">S\'identifier</string>
+    <string name="create_your_account">Créez votre compte</string>
+    <string name="or">OU</string>
+    <string name="sign_in_with_facebook">Connectez-vous avec Facebook</string>
+    <string name="sign_in_with_google">Connectez-vous avec google</string>
+
+    <string-array name="days_array">
+        <item>Aujourd\'hui</item>
+        <item>Demain</item>
+    </string-array>
+    <string name="disclaimer">AVERTISSEMENT</string>
+    <string name="disclaimer_text">
+       Les billets réservés ne sont pas remboursables. L’agence n’est pas responsable des retards pouvant entraîner l’incapacité de prendre un bus.
+    Une fois que vous payez votre billet.\n<b>NB:</b> Vous ne pourrez monter à bord d\'un bus que lorsque votre billet aura été validé par l\'agence.\n
+        Vous ne pouvez reporter votre voyage que pour un jour maximum.</string>
+    <string name="review_app">REVUE DE L\'APP</string>
+    <string name="book_a_classic_bus">RÉSERVER UN BUS CLASSIQUE</string>
+    <string name="book_a_vip_bus">RÉSERVER UN BUS VIP</string>
+    <string name="saving">Enregistrement</string>
+    <string name="i_accept">J\'ACCEPTE</string>
+    <string name="i_decline">JE REFUSE</string>
+    <string name="no_ticket">pas de billet</string>
+    <string name="i_forgot_my_password">j\'ai oublié mon mot de passe</string>
+    <string name="no_route_selected">aucun itinéraire sélectionné</string>
+    <string name="code">Code</string>
+    <string name="email">Email</string>
+    <string name="already_signed_up_log_in">Déjà inscrit, connectez-vous</string>
+    <string name="incorrect_email">Adresse Email incorrecte</string>
+    <string name="please_fill_in_your_name">S\'il vous plaît remplir votre nom</string>
+    <string name="please_fill_in_your_number">S\'il vous plaît remplir votre numéro</string>
+    <string name="password_too_short">Mot de passe trop court</string>
+    <string name="proceed">CONTINUER</string>
+    <string name="connection_warning">Il n\'y a pas de connexion Internet active sur votre appareil.\nvoulez-vous continuer sans vous connecter</string>
+    <string name="no_travel_history">Pas d\'histoire de voyage</string>
+    <string name="reset_your_password">Réinitialisez votre mot de passe</string>
+    <string name="resetting_password">Réinitialisation du mot de passe</string>
+    <string name="reset_message">Les instructions de réinitialisation du mot de passe ont été envoyées à votre adresse email. Vérifiez votre email pour continuer.</string>
+    <string name="about_app_text">Bookaam ™ est une application mobile Android (pour le moment) de réservation de bus à source fermée fonctionnant sur des appareils Android à partir de la version 4.0 d\'Android. Il permet aux agences de bus de vendre des billets de bus en ligne via de l\'argent mobile et permet également aux clients de visualiser les agences disponibles, les itinéraires de voyage disponibles, les dates et heures de départ des agences, de choisir les options de bus disponibles (classique ou VIP) et de les réserver à partir de leurs appareils mobiles.  Bookaam a:\n
+>Une méthode de réservation rapide et facile;
+\n>Une méthode de paiement fiable et sécurisée;
+\n>Suivi de vos enregistrements de voyage
+</string>
+</resources>

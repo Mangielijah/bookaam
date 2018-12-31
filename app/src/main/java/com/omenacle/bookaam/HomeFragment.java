@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 
@@ -90,7 +91,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 setFragment(myTicketsFragment);
                 break;
             case R.id.btn_history:
-                Toast.makeText(getContext(), R.string.history, Toast.LENGTH_SHORT).show();
+                HistoryFragment historyFragment = new HistoryFragment();
+                setFragment(historyFragment);
                 break;
 
         }

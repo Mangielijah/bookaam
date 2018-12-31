@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,11 +22,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.omenacle.bookaam.Account.LoginActivity;
 import com.omenacle.bookaam.DataClasses.BranchInfo;
 import com.omenacle.bookaam.DataClasses.Ticket;
 import com.omenacle.bookaam.MyTicketViewModel;
@@ -182,78 +186,87 @@ public class VIPConfirmFragment extends Fragment {
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dBuilder = new AlertDialog.Builder(getContext());
-                final View dialogView = getLayoutInflater().inflate(R.layout.payment_dialog, null);
-                final TextInputEditText mNumber = dialogView.findViewById(R.id.momo_number);
-                Button payButton = dialogView.findViewById(R.id.btn_pay);
-                dBuilder.setView(dialogView);
-                final AlertDialog dialog = dBuilder.create();
-                dialog.show();
-                payButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String momoNumber = mNumber.getText().toString();
+                FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if(mCurrentUser != null)
+                {
 
-                        //Payment of platform charge url
-                        //chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
-                        chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
-                        //Payment of ticket fare url
-                        fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
-                        //Make ticket charge payment
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                        builder.setTitle(getResources().getString(R.string.disclaimer));
-                        builder.setMessage(getResources().getString(R.string.disclaimer_text)).setPositiveButton(getResources().getString(R.string.i_accept), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialog.dismiss();
-                                if (pref.contains(TICKET_CODE)){
-                                    //Process transport payment here
-                                    ticketCode = pref.getString(TICKET_CODE, null);
-                                    processTranPayment(fareUrlRequest, ticketCode);
-                                }else {
-                                    //Process fare payment first
-                                    PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
-                                        @Override
-                                        public void onCompleted(String response, String msg) {
-                                            Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-                                            Log.d("PaymentTask", response);
-                                            try {
-                                                JSONObject json = new JSONObject(response);
-                                                ticketCode = json.getString("TransactionID");
-                                                String status = json.getString("StatusCode");
-                                                if(status.equals("01")){
-                                                    SharedPreferences.Editor editor = pref.edit();
-                                                    editor.putString(TICKET_CODE, ticketCode);
-                                                    editor.apply();
-                                                    processTranPayment(fareUrlRequest, ticketCode);
-                                                }else {
-                                                    Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder dBuilder = new AlertDialog.Builder(getContext());
+                    final View dialogView = getLayoutInflater().inflate(R.layout.payment_dialog, null);
+                    final TextInputEditText mNumber = dialogView.findViewById(R.id.momo_number);
+                    Button payButton = dialogView.findViewById(R.id.btn_pay);
+                    dBuilder.setView(dialogView);
+                    final AlertDialog dialog = dBuilder.create();
+                    dialog.show();
+                    payButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String momoNumber = mNumber.getText().toString();
+
+                            //Payment of platform charge url
+                            //chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
+                            chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
+                            //Payment of ticket fare url
+                            fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
+                            //Make ticket charge payment
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                            builder.setTitle(getResources().getString(R.string.disclaimer));
+                            builder.setMessage(getResources().getString(R.string.disclaimer_text)).setPositiveButton(getResources().getString(R.string.i_accept), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialog.dismiss();
+                                    if (pref.contains(TICKET_CODE)){
+                                        //Process transport payment here
+                                        ticketCode = pref.getString(TICKET_CODE, null);
+                                        processTranPayment(fareUrlRequest, ticketCode);
+                                    }else {
+                                        //Process fare payment first
+                                        PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
+                                            @Override
+                                            public void onCompleted(String response, String msg) {
+                                                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                                Log.d("PaymentTask", response);
+                                                try {
+                                                    JSONObject json = new JSONObject(response);
+                                                    ticketCode = json.getString("TransactionID");
+                                                    String status = json.getString("StatusCode");
+                                                    if(status.equals("01")){
+                                                        SharedPreferences.Editor editor = pref.edit();
+                                                        editor.putString(TICKET_CODE, ticketCode);
+                                                        editor.apply();
+                                                        processTranPayment(fareUrlRequest, ticketCode);
+                                                    }else {
+                                                        Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(String msg) {
-                                            Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                    chargeTask.execute();
+                                            @Override
+                                            public void onFailure(String msg) {
+                                                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                        chargeTask.execute();
+                                    }
+
                                 }
+                            }).setNegativeButton(getResources().getString(R.string.i_decline), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                            }
-                        }).setNegativeButton(getResources().getString(R.string.i_decline), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        final AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                });
+                            final AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    });
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
             }
         });
 

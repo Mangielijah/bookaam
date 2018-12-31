@@ -3,27 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:paddingBottom="16dp"
     android:orientation="vertical">
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="50px"
-            android:layout_height="50px"
-            android:src="@drawable/bookaaam"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/select_time_and_day"
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimaryText"
-            android:textStyle="bold"
-            android:paddingLeft="8dp"
-            android:paddingStart="8dp"
-            tools:ignore="RtlSymmetry" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:text="@string/app_name"
+        android:textSize="36sp"
+        android:paddingTop="10dp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        android:fontFamily="@font/berlin_sans_fb_regular"
+        android:gravity="center"/>
+
 
     <TextView
         android:layout_width="match_parent"
@@ -32,13 +26,17 @@
         android:textSize="18sp"
         android:textColor="@color/colorPrimaryText"
         android:paddingBottom="4dp"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
     <Spinner
         android:id="@+id/time_spinner"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="center"
         android:textAlignment="center"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         />
     <TextView
         android:layout_width="match_parent"
@@ -47,6 +45,8 @@
         android:textSize="18sp"
         android:textColor="@color/colorPrimaryText"
         android:paddingBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:paddingTop="4dp"/>
     <Spinner
         android:id="@+id/day_spinner"
@@ -54,16 +54,20 @@
         android:layout_height="48dp"
         android:layout_gravity="center"
         android:textAlignment="center"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         />
     <Button
         android:layout_width="match_parent"
-        android:layout_height="58dp"
+        android:layout_height="48dp"
         android:background="@drawable/btn_primary_bk"
         android:text="@string/submit"
         android:textColor="@color/white"
         android:layout_marginTop="8dp"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:id="@+id/btn_submit"
         android:textAllCaps="false"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         />
 </LinearLayout>

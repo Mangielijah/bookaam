@@ -18,9 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/user_image"
-        android:text="mangielijah8@gmail.com"
-        android:textSize="14sp"
-        android:paddingTop="14dp"
+        android:text="support@bookaam.com"
+        android:id="@+id/nav_header_text"
+        android:textSize="16sp"
+        android:paddingTop="12dp"
         app:fontFamily="@font/berlin_sans_fb_regular"
         android:textColor="@color/colorSecondaryText"/>
 

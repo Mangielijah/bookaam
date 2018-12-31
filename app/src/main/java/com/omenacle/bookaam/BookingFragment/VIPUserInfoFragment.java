@@ -2,6 +2,7 @@ package com.omenacle.bookaam.BookingFragment;
 
 
 import android.app.AlertDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,14 +19,18 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.omenacle.bookaam.DataClasses.BookaamInfo;
+import com.omenacle.bookaam.DataClasses.User;
 import com.omenacle.bookaam.OnGetFirebaseDataListener;
 import com.omenacle.bookaam.R;
+import com.omenacle.bookaam.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +59,9 @@ public class  VIPUserInfoFragment extends Fragment implements AdapterView.OnItem
     //bookam info
     String bEmail, bPass;
     Long bCharge;
+    UserViewModel userViewModel;
+    FirebaseUser mCurrentUser;
+    User user;
 
     public static VIPUserInfoFragment newInstance(String travel_time) {
         VIPUserInfoFragment fragment = new VIPUserInfoFragment();
@@ -62,6 +70,12 @@ public class  VIPUserInfoFragment extends Fragment implements AdapterView.OnItem
         args.putString(TRAVEL_TIME, travel_time);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     }
 
     @Override

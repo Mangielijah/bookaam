@@ -1,6 +1,5 @@
 package com.omenacle.bookaam;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
@@ -13,16 +12,43 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.omenacle.bookaam.Account.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     boolean doubleBackToExitPressedOnce = false;
+    TextView emailTextView;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            Log.d("OnStartuser", user.getEmail());
+            updateUI(user);
+        }
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null){
+            emailTextView.setText(user.getEmail());
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
         setFragment(homeFragment, "home");
 
         NavigationView mNavigationView = findViewById(R.id.nav_view);
+        //Get navigation header
+        View headerView = mNavigationView.getHeaderView(0);
+        emailTextView = headerView.findViewById(R.id.nav_header_text);
+
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -84,40 +114,31 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
+                    case R.id.nav_demo:
+                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                        intent.putExtra("DEMO", true);
+                        startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+                        break;
                     case R.id.nav_review:
                         Toast.makeText(MainActivity.this, R.string.reviews, Toast.LENGTH_SHORT).show();
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_share:
-                        Toast.makeText(MainActivity.this, R.string.share, Toast.LENGTH_SHORT).show();
+                        share();
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
-                    case R.id.nav_faq:
-                        Toast.makeText(MainActivity.this, R.string.faq, Toast.LENGTH_SHORT).show();
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    case R.id.nav_disclaimer:
-                        Toast.makeText(MainActivity.this, R.string.disclaimer, Toast.LENGTH_SHORT).show();
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
                     case R.id.nav_about:
                         Toast.makeText(MainActivity.this, R.string.about_us, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
-                    case R.id.nav_policy:
-                        Toast.makeText(MainActivity.this, R.string.refund_policy, Toast.LENGTH_SHORT).show();
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
                     case R.id.nav_logout:
-                        Toast.makeText(MainActivity.this, R.string.log_out, Toast.LENGTH_SHORT).show();
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
+                        mAuth.signOut();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
                         return true;
 
                 }
@@ -167,5 +188,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_panel, fragment).addToBackStack(tag);
         fragmentTransaction.commit();
+    }
+
+    private void share(){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.text_to_share));
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
     }
 }

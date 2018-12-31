@@ -24,7 +24,6 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10/11/2018"
                 android:textSize="16sp"
                 android:paddingRight="4dp"
                 android:paddingEnd="4dp"
@@ -35,7 +34,6 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bamenda -> Limbe"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp"
                 android:layout_toRightOf="@id/date"
@@ -144,7 +142,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Mangi Elijah"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -154,7 +151,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="672084140"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -164,7 +160,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="000157329"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -174,7 +169,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Garanti Express"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="16sp"
                     android:id="@+id/agency_booked"
@@ -184,7 +178,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Morning"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -194,7 +187,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="10/11/2018"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -204,7 +196,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="5000FCFA"
                     android:id="@+id/ticket_price"
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"
@@ -214,7 +205,6 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="300FCFA"
                     android:id="@+id/charge"
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"

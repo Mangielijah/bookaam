@@ -1,14 +1,13 @@
 package com.omenacle.bookaam;
 
 import android.content.Intent;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+
+import com.omenacle.bookaam.Account.LoginActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -29,7 +28,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
+                    startActivity(new Intent(SplashScreenActivity.this, WelcomeActivity.class));
                     finish();
                 }
             }

@@ -29,27 +29,15 @@
         android:checkableBehavior="none"
         android:id="@+id/middle_nav_group">
         <item
+            android:id="@+id/nav_demo"
+            android:title="@string/how_to_book" />
+        <item
             android:id="@+id/nav_review"
             android:title="@string/review_app" />
 
         <item
             android:id="@+id/nav_share"
             android:title="@string/share" />
-
-        <item
-            android:id="@+id/nav_faq"
-            android:title="@string/faq" />
-    </group>
-
-    <group
-        android:checkableBehavior="none"
-        android:id="@+id/bottom_nav_group">
-        <item
-            android:id="@+id/nav_policy"
-            android:title="@string/refund_policy" />
-        <item
-            android:id="@+id/nav_disclaimer"
-            android:title="@string/disclaimer" />
 
         <item
             android:id="@+id/nav_about"
