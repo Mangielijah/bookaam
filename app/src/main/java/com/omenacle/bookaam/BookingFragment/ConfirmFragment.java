@@ -296,7 +296,7 @@ public class ConfirmFragment extends Fragment {
                         pd.setCanceledOnTouchOutside(false);
                         pd.show();
 
-                        Ticket mTicket = new Ticket(agency_key, getBranchKey(agency_key, troute), Long.parseLong(ticketCode), travelDay, p_name, Long.parseLong(p_num), Long.parseLong(p_id), troute, travelTime);
+                        Ticket mTicket = new Ticket(agency_key, getBranchKey(agency_key, troute), Long.parseLong(ticketCode), travelDay, p_name, Long.parseLong(p_num), Long.parseLong(p_id), troute, travelTime, "n");
 
                         //Sending ticket online to firebase
                         sendTicketOnline(mTicket);

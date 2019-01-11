@@ -41,12 +41,31 @@ public class Ticket {
     @ColumnInfo(name = "r")
     @NonNull
     private String r;
-
     //Travel time (e.g Morning, Afternoon, Night)
     @ColumnInfo(name = "time")
     private String time;
+    //Ticket status
+    private String status;
+    //r_time used for querrying firebase database
+    private String r_time;
 
-    public Ticket(@NonNull String a, @NonNull String b, @NonNull long code, @NonNull String date, @NonNull String name, @NonNull long num, long id, @NonNull String r, String time) {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getR_time() {
+        return r_time;
+    }
+
+    public void setR_time(String r_time) {
+        this.r_time = r_time;
+    }
+
+    public Ticket(@NonNull String a, @NonNull String b, @NonNull long code, @NonNull String date, @NonNull String name, @NonNull long num, long id, @NonNull String r, String time, String status) {
         this.a = a;
         this.b = b;
         this.code = code;
@@ -56,6 +75,8 @@ public class Ticket {
         this.id = id;
         this.r = r;
         this.time = time;
+        this.status = status;
+        this.r_time = r + "_" + time +"_"+ date;
     }
 
     //Public getters
