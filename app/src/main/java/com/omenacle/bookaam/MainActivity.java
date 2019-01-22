@@ -1,6 +1,10 @@
 package com.omenacle.bookaam;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -108,19 +113,18 @@ public class MainActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         return true;
                     case  R.id.nav_history:
-                        Toast.makeText(MainActivity.this, R.string.history, Toast.LENGTH_SHORT).show();
                         HistoryFragment historyFragment = new HistoryFragment();
                         setFragment(historyFragment, "history");
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_demo:
-                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-                        intent.putExtra("DEMO", true);
+                        PrefManager prefManager = new PrefManager(MainActivity.this);
+                        prefManager.setFirstTimeLaunch(true);
                         startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
                         break;
                     case R.id.nav_review:
-                        Toast.makeText(MainActivity.this, R.string.reviews, Toast.LENGTH_SHORT).show();
+                        openUrl("https://play.google.com/store/apps/details?id=com.omenacle.bookaam");
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
@@ -130,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_about:
-                        Toast.makeText(MainActivity.this, R.string.about_us, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
@@ -148,6 +151,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void openUrl(String url){
+        if(isNetworkAvailable()){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        }
+        else{
+            AlertDialog.Builder bd = new AlertDialog.Builder(MainActivity.this);
+            bd.setMessage(getString(R.string.require_internet));
+            bd.create().show();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

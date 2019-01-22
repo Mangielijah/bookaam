@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name" translatable="false">Bookaam</string>
+    <string name="app_name">Bookaam</string>
     <string name="book_tickets">BOOK TICKETS</string>
     <string name="my_tickets">MY TICKETS</string>
     <string name="history">HISTORY</string>
     <string name="reviews">REVIEWS</string>
-    <string name="contact_feedback" translatable="false"><![CDATA[CONTACT & FEEDBACK]]></string>
+    <string name="contact_feedback"><![CDATA[CONTACT & FEEDBACK]]></string>
     <string name="share">SHARE</string>
-    <string name="faq" translatable="false">FAQ</string>
+    <string name="faq">FAQ</string>
     <string name="about_us">ABOUT US</string>
     <string name="refund_policy">REFUND POLICY</string>
     <string name="log_out">LOG OUT</string>
@@ -14,13 +14,13 @@
     <string name="book_now">BOOK NOW</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="messaging">MESSAGING</string>
     <string name="location">LOCATION</string>
     <string name="information">INFORMATION</string>
     <string name="confirm">CONFIRM</string>
     <string name="agency">Agency</string>
-    <string name="fcfa" translatable="false">FCFA</string>
+    <string name="fcfa">FCFA</string>
     <string name="select_agency_from_the_list">select agency from the list</string>
     <string name="name">Name</string>
     <string name="phone_number">Phone number</string>
@@ -43,10 +43,10 @@
     <string name="select_route">Select route</string>
     <string name="title_activity_booking">BookingActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
+    <string name="section_format">Hello World from section: %1$d</string>
     <string name="trip_booked">Trip booked</string>
     <string name="postpone_your_ticket">Postpone your ticket</string>
-    <string name="reactivate_your_ticket" translatable="false">Reactivate your ticket</string>
+    <string name="reactivate_your_ticket">Reactivate your ticket</string>
     <string name="travel_time">Travel time</string>
     <string name="select_time_and_day">Select time and day</string>
     <string name="payment_info">Payment info</string>
@@ -68,8 +68,7 @@
     </string-array>
     <string name="disclaimer">DISCLAIMER</string>
     <string name="disclaimer_text">
-        Tickets booked are non refundable. The agency is not responsible for lateness that may result in failure to board a bus.
-    Once you pay for your ticket.\n<b>NB:</b> You shall only be allowed to board a bus when your ticket is validated by the agency.\n
+        Tickets booked are non refundable. The agency is not responsible for lateness that may result in failure to board a bus once you pay for your ticket.\n<b>NB:</b> You shall only be allowed to board a bus when your ticket is validated by the agency.\n
         You can only postpone your ticket for not more than 1 day.</string>
     <string name="review_app">REVIEW APP</string>
     <string name="book_a_classic_bus">BOOK A CLASSIC BUS</string>
@@ -80,8 +79,8 @@
     <string name="no_ticket">no ticket</string>
     <string name="i_forgot_my_password">I forgot my password</string>
     <string name="no_route_selected">No route selected</string>
-    <string name="code" translatable="false">Code</string>
-    <string name="email" translatable="false">Email</string>
+    <string name="code">Code</string>
+    <string name="email">Email</string>
     <string name="already_signed_up_log_in">Already signed up log in</string>
     <string name="incorrect_email">Incorrect email</string>
     <string name="please_fill_in_your_name">Please fill in your name</string>
@@ -112,8 +111,8 @@
 
     <string name="start">GOT IT</string>
 
-    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
-    <string name="play_again">Play Again</string>
+    <string name="play_again_desc" translatable="false">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again" translatable="false">Play Again</string>
     <string name="slide_desc_home">Press on book your bus button and select the type of ticket Classic(Normal) or Vip.</string>
     <string name="slide_desc_agency">Scroll through the list of agencies displayed and select an agency</string>
     <string name="slide_desc_info">Fill in your personal information in the fields provided and press on submit.</string>
@@ -121,4 +120,21 @@
     <string name="how_to_book">How to Book</string>
     <string name="welcome">Welcome</string>
     <string name="welcome_desc">Take time to learn how to book your ticket from home</string>
+    <string name="no_idcard">No id card</string>
+    <string name="momonumber_error">Please enter momo number</string>
+    <string name="incomplete_ticket">You have not completed payment for your travel ticket.Please follow the process and pay for your transport fare.</string>
+    <string name="trans_dialog">Platform charge payment completed.\nClick continue to pay your transport fare </string>
+    <string name="completed">Completed</string>
+    <string name="completed_text">Payment completed. go back and check your ticket under my tickets</string>
+    <string name="postpone_info">Please SMS us your ticket\ntype[VIP or CLASSIC]\ncode[example:456789831]\nName\nto this number: 672084140 if you wish to postpone your ticket </string>
+    <string name="info" translatable="false">Info</string>
+    <string name="continu">CONTINUE</string>
+    <string name="no_route">No route selected\ngo back and select your travel route</string>
+    <string name="select_your_location">Select your location</string>
+    <string name="enter_info">Enter information</string>
+    <string name="confirm_pay">Confirm and pay</string>
+    <string name="reg_user">Registering user…</string>
+    <string name="log_user">Login in please wait…</string>
+    <string name="log_failed">Login failed</string>
+    <string name="signup_failed">Failed to sign up</string>
 </resources>

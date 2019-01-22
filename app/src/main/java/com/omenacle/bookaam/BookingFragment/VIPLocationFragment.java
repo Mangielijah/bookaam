@@ -155,7 +155,7 @@ public class VIPLocationFragment extends Fragment {
                 listener.onFailure(databaseError.getMessage());
             }
         };
-        mDatabase.child("vr").addListenerForSingleValueEvent(mGetRouteListListener);
+        mDatabase.child("vr").orderByChild("a_k").equalTo(agency_key).addValueEventListener(mGetRouteListListener);
     }
 
     public interface OnLocationListener{

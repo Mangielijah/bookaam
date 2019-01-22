@@ -98,4 +98,43 @@
 \n>Une méthode de paiement fiable et sécurisée;
 \n>Suivi de vos enregistrements de voyage
 </string>
+    <string name="app_name_text">Nom de l\'application:</string>
+    <string name="website">Site Internet:</string>
+    <string name="www_bookaam_com">bookaam.com</string>
+    <string name="version">Version:</string>
+    <string name="_1_00">1.00</string>
+    <string name="developers">Développeurs:</string>
+    <string name="omenacle_technology">Omenacle Dev\'s</string>
+    <string name="terms_and_conditions">Termes et conditions</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="require_internet">Pas de connexion Internet. Veuillez activer les données mobiles</string>
+    <string name="text_to_share">Découvrez Bookaam, je l\'utilise pour réserver mon billet dans n\'importe quelle agence de chez vous. Obtenez-le gratuitement à https://www.bookaam.com/</string>
+    <string name="send_to">Envoyer à</string>
+
+    <string name="start">JE L\'AI</string>
+
+
+    <string name="slide_desc_home">Appuyez sur le bouton Réserver votre bus et sélectionnez le type de billet Classic (Normal) ou Vip.</string>
+    <string name="slide_desc_agency">Faites défiler la liste des agences affichées et sélectionnez une agence</string>
+    <string name="slide_desc_info">Remplissez vos informations personnelles dans les champs fournis et appuyez sur soumettre.</string>
+    <string name="slide_desc_confirm">Vérifiez les informations affichées et assurez-vous qu\'elles sont correctes, puis appuyez sur le bouton de réservation de voyage</string>
+    <string name="how_to_book">Comment réserver</string>
+    <string name="welcome">Bienvenue</string>
+    <string name="welcome_desc">Prenez le temps d\'apprendre comment réserver votre billet depuis n\'importe où</string>
+    <string name="no_idcard">Pas de carte d\'identité</string>
+    <string name="momonumber_error">S\'il vous plaît entrer le numéro momo</string>
+    <string name="incomplete_ticket">Vous n\'avez pas terminé le paiement de votre titre de transport.Veuillez suivre la procédure et payer votre titre de transport.</string>
+    <string name="trans_dialog">Le paiement de la charge de la plateforme est terminé. Cliquez sur Continuer pour payer votre titre de transport.</string>
+    <string name="completed">Terminé</string>
+    <string name="completed_text">Paiement terminé. revenir en arrière et vérifier votre billet sous mes billets</string>
+    <string name="postpone_info">Veuillez nous envoyer votre ticket par SMS \n type [VIP ou CLASSIC] \n code [exemple: 456789831] \n Nom \n du même numéro: 672084140 si vous souhaitez reporter votre ticket.</string>
+    <string name="continu">CONTINUER</string>
+    <string name="no_route">Aucun itinéraire sélectionné\nRetour et sélectionnez votre itinéraire</string>
+    <string name="select_your_location">Sélectionnez votre emplacement</string>
+    <string name="enter_info">Entrez les informations</string>
+    <string name="confirm_pay">Confirmer et payer</string>
+    <string name="reg_user">Enregistrement de l\'utilisateur …</string>
+    <string name="log_user">Connexion en cours, veuillez patienter …</string>
+    <string name="log_failed">Échec de la connexion</string>
+    <string name="signup_failed">Échec de l\'inscription</string>
 </resources>

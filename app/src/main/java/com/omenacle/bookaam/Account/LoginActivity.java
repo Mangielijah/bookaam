@@ -107,10 +107,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String email = emailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
 
                 if(isValidEmail(email)){
-                    signInWithEmailandPass(email, password);
+                    if(!TextUtils.isEmpty(passwordEditText.getText().toString())){
+                        String password = passwordEditText.getText().toString().trim();
+                        signInWithEmailandPass(email, password);
+                    }
+                    else{
+                        Toast.makeText(LoginActivity.this,getResources().getString(R.string.password_too_short), Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     Toast.makeText(LoginActivity.this,getResources().getString(R.string.incorrect_email), Toast.LENGTH_SHORT).show();
                 }
@@ -132,31 +137,36 @@ public class LoginActivity extends AppCompatActivity {
                 resetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String resetEmail = email.getText().toString().trim();
-                        d.dismiss();
-                        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
-                        pd.setTitle(getResources().getString(R.string.resetting_password));
-                        pd.setMessage(getResources().getString(R.string.please_wait));
-                        pd.show();
-                        FirebaseAuth.getInstance().sendPasswordResetEmail(resetEmail)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            pd.dismiss();
-                                            AlertDialog.Builder bd = new AlertDialog.Builder(LoginActivity.this);
-                                            bd.setMessage(getResources().getString(R.string.reset_message))
-                                                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            dialogInterface.dismiss();
-                                                        }
-                                                    }).create();
-                                            bd.show();
-                                            Log.d("ResetEmail", "Email sent.");
+                        if(!TextUtils.isEmpty(email.getText().toString()))
+                        {
+                            String resetEmail = email.getText().toString().trim();
+                            d.dismiss();
+                            final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+                            pd.setTitle(getResources().getString(R.string.resetting_password));
+                            pd.setMessage(getResources().getString(R.string.please_wait));
+                            pd.show();
+                            FirebaseAuth.getInstance().sendPasswordResetEmail(resetEmail)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                pd.dismiss();
+                                                AlertDialog.Builder bd = new AlertDialog.Builder(LoginActivity.this);
+                                                bd.setMessage(getResources().getString(R.string.reset_message))
+                                                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                                dialogInterface.dismiss();
+                                                            }
+                                                        }).create();
+                                                bd.show();
+                                                Log.d("ResetEmail", "Email sent.");
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        }else{
+                            Toast.makeText(LoginActivity.this,getResources().getString(R.string.incorrect_email), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -212,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // Google Sign In failed, update UI appropriately
             Log.w("GoogleSignIn", "Google sign in failed: ", e);            //show toast
-            Toast.makeText(this, "Failed to do Sign In : " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getText(R.string.log_failed), Toast.LENGTH_SHORT).show();
             // ...
         }
     }
@@ -221,7 +231,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.d("GoogleSignIn", "firebaseAuthWithGoogle:" + acct.getId());
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Login in please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.log_user));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -239,7 +249,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("GoogleSignIn", "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.main_layout), getResources().getText(R.string.log_failed), Snackbar.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
 
@@ -252,7 +262,7 @@ public class LoginActivity extends AppCompatActivity {
     private void signInWithEmailandPass(String email, String password) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         Log.d("Login Activity:", email +" : "+ password);
-        progressDialog.setMessage("Login in please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.log_user));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -272,7 +282,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, getResources().getText(R.string.log_failed),
                                     Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }

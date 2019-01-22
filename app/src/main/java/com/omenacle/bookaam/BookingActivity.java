@@ -93,7 +93,7 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
         for(int i = 0; i < tabLayout.getTabCount(); i++){
             switch (i){
                 case 0:
-                    setActionBarTitle("Select your location");
+                    setActionBarTitle(getResources().getString(R.string.select_your_location));
                     tabLayout.getTabAt(i).setIcon(R.drawable.location_icon);
                     break;
                 case 1:
@@ -150,13 +150,13 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
         Log.d("PageSelectedPosition", String.valueOf(position));
         switch (position){
             case 0:
-                setActionBarTitle("Select your location");
+                setActionBarTitle(getResources().getString(R.string.select_your_location));
                 break;
             case 1:
-                setActionBarTitle("Enter information");
+                setActionBarTitle(getResources().getString(R.string.enter_info));
                 break;
             case 2:
-                setActionBarTitle("Confirm and pay");
+                setActionBarTitle(getResources().getString(R.string.confirm_pay));
                 break;
         }
     }
@@ -182,15 +182,15 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
             Fragment fragment = null;
             switch (position){
                 case 0:
-                    setActionBarTitle("Select your location");
+                    setActionBarTitle(getResources().getString(R.string.select_your_location));
                     fragment = LocationFragment.newInstance(agency_key, agency_name);
                     break;
                 case 1:
-                    setActionBarTitle("Enter your information");
+                    setActionBarTitle(getResources().getString(R.string.enter_info));
                     fragment = new UserInfoFragment();
                     break;
                 case 2:
-                    setActionBarTitle("Confirm and pay");
+                    setActionBarTitle(getResources().getString(R.string.confirm_pay));
                     fragment = ConfirmFragment.newInstance(agency_name, agency_key, route, ticketPrice);
                     break;
             }

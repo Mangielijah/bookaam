@@ -155,7 +155,7 @@ public class LocationFragment extends Fragment {
                 listener.onFailure(databaseError.getMessage());
             }
         };
-        mDatabase.child("r").addListenerForSingleValueEvent(mGetRouteListListener);
+        mDatabase.child("r").orderByChild("a_k").equalTo(agency_key).addValueEventListener(mGetRouteListListener);
     }
 
     public interface OnLocationListener{

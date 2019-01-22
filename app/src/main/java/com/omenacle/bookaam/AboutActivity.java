@@ -33,9 +33,6 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_disclaimer:
-                openUrl("http://bookaam.com/disclaimer.html");
-                return true;
             case R.id.action_privacy:
                 openUrl("http://bookaam.com/privacy.html");
                 return true;

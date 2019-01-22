@@ -1,10 +1,15 @@
 package com.omenacle.bookaam.ListAdapters;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,11 +81,39 @@ public class TicketListAdapter extends RecyclerView.Adapter<TicketListAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     int position = recyclerView.getChildLayoutPosition(itemView);
-                    String code = String.valueOf(tickets.get(position).getCode());
+                    final String tcode = String.valueOf(tickets.get(position).getCode());
+                    final String tnum = String.valueOf(tickets.get(position).getNum());
+                    final String tname = String.valueOf(tickets.get(position).getName());
                     Ticket ticket = tickets.get(position);
-                    Toast.makeText(ctx, code, Toast.LENGTH_SHORT).show();
+                    //Alert the info
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    builder.setTitle(ctx.getResources().getString(R.string.info))
+                            .setMessage(ctx.getResources().getString(R.string.postpone_info))
+                            .setPositiveButton(ctx.getResources().getString(R.string.continu), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    sendSmsMessage("672084140",tcode , tname);
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
+        }
+
+        private void sendSmsMessage(String number, String code, String name){
+            String smsNumber = "smsto:"+number;
+            String msg = "Bookaam Postpone Ticket\nCode: " + code + "\nName: "+ name;
+            Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+            smsIntent.setData(Uri.parse(smsNumber));
+            smsIntent.putExtra("sms_body", msg);
+            // If package resolves (target app installed), send intent.
+            if (smsIntent.resolveActivity(ctx.getPackageManager()) != null) {
+                ctx.startActivity(smsIntent);
+            } else {
+                Log.e("TAG", "Can't resolve app for ACTION_SENDTO Intent.");
+            }
         }
     }
 }

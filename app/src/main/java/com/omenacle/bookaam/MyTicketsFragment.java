@@ -1,8 +1,11 @@
 package com.omenacle.bookaam;
 
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -92,6 +95,23 @@ public class MyTicketsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences pref = getActivity().getSharedPreferences("ticket", Context.MODE_PRIVATE);
 
+        String VIP_TICKET_CODE = "VIP_TICKET_CODE";
+        String CLASSIC_TICKET_CODE = "CLASSIC_TICKET_CODE";
+
+        if(pref.contains(VIP_TICKET_CODE)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder .setMessage(getContext().getResources().getString(R.string.incomplete_ticket));
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+
+        if (pref.contains(CLASSIC_TICKET_CODE)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder .setMessage(getContext().getResources().getString(R.string.incomplete_ticket));
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
 }

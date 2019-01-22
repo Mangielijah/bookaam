@@ -90,7 +90,7 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
         for(int i = 0; i < tabLayout.getTabCount(); i++){
             switch (i){
                 case 0:
-                    setActionBarTitle("Select your location");
+                    setActionBarTitle(getResources().getString(R.string.select_your_location));
                     tabLayout.getTabAt(i).setIcon(R.drawable.location_icon);
                     break;
                 case 1:
@@ -146,13 +146,13 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
         Log.d("PageSelectedPosition", String.valueOf(position));
         switch (position){
             case 0:
-                setActionBarTitle("Select your location");
+                setActionBarTitle(getResources().getString(R.string.select_your_location));
                 break;
             case 1:
-                setActionBarTitle("Enter information");
+                setActionBarTitle(getResources().getString(R.string.enter_info));
                 break;
             case 2:
-                setActionBarTitle("Confirm and pay");
+                setActionBarTitle(getResources().getString(R.string.confirm_pay));
                 break;
         }
     }
@@ -178,15 +178,15 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
             Fragment fragment = null;
             switch (position){
                 case 0:
-                    setActionBarTitle("Select your location");
+                    setActionBarTitle(getResources().getString(R.string.select_your_location));
                     fragment = VIPLocationFragment.newInstance(agency_key, agency_name);
                     break;
                 case 1:
-                    setActionBarTitle("Enter your information");
+                    setActionBarTitle(getResources().getString(R.string.enter_info));
                     fragment = new VIPUserInfoFragment();
                     break;
                 case 2:
-                    setActionBarTitle("Confirm and pay");
+                    setActionBarTitle(getResources().getString(R.string.confirm_pay));
                     fragment = VIPConfirmFragment.newInstance(agency_name, agency_key, route, ticketPrice);
                     break;
             }

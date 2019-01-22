@@ -4,11 +4,14 @@ package com.omenacle.bookaam.BookingFragment;
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +38,10 @@ import com.omenacle.bookaam.UserViewModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.omenacle.bookaam.BookingFragment.UserInfoFragment.TICKET_ID_NUM;
+import static com.omenacle.bookaam.BookingFragment.UserInfoFragment.TICKET_NAME;
+import static com.omenacle.bookaam.BookingFragment.UserInfoFragment.TICKET_NUMBER;
 
 
 /**
@@ -63,6 +70,10 @@ public class  VIPUserInfoFragment extends Fragment implements AdapterView.OnItem
     FirebaseUser mCurrentUser;
     User user;
 
+    private SharedPreferences pref;
+
+
+
     public static VIPUserInfoFragment newInstance(String travel_time) {
         VIPUserInfoFragment fragment = new VIPUserInfoFragment();
         traveltime = travel_time;
@@ -86,6 +97,9 @@ public class  VIPUserInfoFragment extends Fragment implements AdapterView.OnItem
         if(mBundle != null){
             traveltime = mBundle.getString(TRAVEL_TIME);
         }
+
+        pref = getActivity().getSharedPreferences("ticket", Context.MODE_PRIVATE);
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("b").keepSynced(true);
 
@@ -118,12 +132,23 @@ public class  VIPUserInfoFragment extends Fragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_info, container, false);
+        final View view = inflater.inflate(R.layout.fragment_user_info, container, false);
 
         nameEditText = view.findViewById(R.id.passenger_name);
         phoneEditText = view.findViewById(R.id.passenger_number);
         idEditText = view.findViewById(R.id.passenger_id);
         mSubmitButton = view.findViewById(R.id.btnSubmit);
+
+        if(pref.contains(TICKET_NAME)){
+            nameEditText.setText(pref.getString(TICKET_NAME, null));
+        }
+        if(pref.contains(TICKET_NUMBER)){
+            phoneEditText.setText(pref.getString(TICKET_NUMBER, null));
+        }
+        if (pref.contains(TICKET_ID_NUM) && !pref.getString(TICKET_ID_NUM, null).equals("1") ){
+            idEditText.setText(pref.getString(TICKET_ID_NUM, null));
+        }
+
         ctx = getContext();
 
 
@@ -136,44 +161,59 @@ public class  VIPUserInfoFragment extends Fragment implements AdapterView.OnItem
                         mPhone = phoneEditText.getText().toString();
                         mId = idEditText.getText().toString();
 
-                        if(mId == null){
-                            mId = "";
+                        if(mId.isEmpty()){
+                            mId = "1";
                         }
 
-                        List<String> timeArray = getTimeArray(traveltime);
 
-                        AlertDialog.Builder timeDayDialog = new AlertDialog.Builder(ctx);
-                        final View dialogView = getLayoutInflater().inflate(R.layout.time_day_dialog, null);
-                        Button btnSubmitDialog = dialogView.findViewById(R.id.btn_submit);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString(TICKET_NAME, mName);
+                        editor.putString(TICKET_NUMBER, mPhone);
+                        editor.putString(TICKET_ID_NUM, mId);
+                        editor.apply();
 
-                        Spinner travel_time = dialogView.findViewById(R.id.time_spinner);
-                        Spinner travel_day = dialogView.findViewById(R.id.day_spinner);
+                        if(traveltime != null)
+                        {
+                            List<String> timeArray = getTimeArray(traveltime);
 
-                        //initialising spinner
-                        ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(ctx, R.layout.spinner_row, timeArray);
-                        ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(ctx, R.array.days_array, R.layout.spinner_row);
+                            AlertDialog.Builder timeDayDialog = new AlertDialog.Builder(ctx);
+                            final View dialogView = getLayoutInflater().inflate(R.layout.time_day_dialog, null);
+                            Button btnSubmitDialog = dialogView.findViewById(R.id.btn_submit);
 
-                        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            Spinner travel_time = dialogView.findViewById(R.id.time_spinner);
+                            Spinner travel_day = dialogView.findViewById(R.id.day_spinner);
 
-                        travel_time.setOnItemSelectedListener(VIPUserInfoFragment.this);
-                        travel_day.setOnItemSelectedListener(VIPUserInfoFragment.this);
+                            //initialising spinner
+                            ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(ctx, R.layout.spinner_row, timeArray);
+                            ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(ctx, R.array.days_array, R.layout.spinner_row);
 
-                        //Setting adapter to spinner
-                        travel_time.setAdapter(timeAdapter);
-                        travel_day.setAdapter(dayAdapter);
+                            timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                        timeDayDialog.setView(dialogView);
-                        final AlertDialog dialog = timeDayDialog.create();
-                        dialog.show();
+                            travel_time.setOnItemSelectedListener(VIPUserInfoFragment.this);
+                            travel_day.setOnItemSelectedListener(VIPUserInfoFragment.this);
 
-                        btnSubmitDialog.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                                listener.onSendUserInfo(mName, mPhone, mId, time, day, bCharge, bEmail, bPass);
-                            }
-                        });
+                            //Setting adapter to spinner
+                            travel_time.setAdapter(timeAdapter);
+                            travel_day.setAdapter(dayAdapter);
+
+                            timeDayDialog.setView(dialogView);
+                            final AlertDialog dialog = timeDayDialog.create();
+                            dialog.show();
+
+                            btnSubmitDialog.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                    listener.onSendUserInfo(mName, mPhone, mId, time, day, bCharge, bEmail, bPass);
+                                }
+                            });
+
+                        }
+                        else{
+                            Snackbar routeSnackBar = Snackbar.make(view, R.string.no_route, Snackbar.LENGTH_LONG);
+                            routeSnackBar.show();
+                        }
 
 
                     }else{
@@ -229,7 +269,7 @@ public class  VIPUserInfoFragment extends Fragment implements AdapterView.OnItem
 
     private List<String> getTimeArray(String time){
         List<String> timeArray = new ArrayList<>();
-        if(time.contains("_")){
+        if(time != null && time.contains("_")){
             String s[] = time.split("_");
             if(s.length > 0){
                 Log.d("SplitTime1", s[0]);

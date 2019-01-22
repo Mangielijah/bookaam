@@ -135,7 +135,7 @@ public class BookVIPTicketFragment extends Fragment {
             }
         };
 
-        mDatabase.child("a").addListenerForSingleValueEvent(mAgencyListListener);
+        mDatabase.child("a").addValueEventListener(mAgencyListListener);
 
     }
 

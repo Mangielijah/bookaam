@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +43,7 @@ import com.omenacle.bookaam.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,7 +64,8 @@ public class VIPConfirmFragment extends Fragment {
     public static long tprice, tcharge;
     public String branchEmail, branchPass;
 
-    Context ctx;
+    @SuppressLint("StaticFieldLeak")
+    private static Context ctx;
     ProgressDialog pd;
 
     private OnConfirmTicketListener listener;
@@ -78,7 +83,7 @@ public class VIPConfirmFragment extends Fragment {
     private static AppCompatTextView dateTravelTextView;
     private static AppCompatTextView priceTextView;
     private static AppCompatTextView chargeTextView;
-    public static String TICKET_CODE = "TICKET_CODE";
+    private static String TICKET_CODE = "VIP_TICKET_CODE";
     private String fareUrlRequest, chargeUrlRequest;
     String ticketCode;
     private SharedPreferences pref;
@@ -200,66 +205,88 @@ public class VIPConfirmFragment extends Fragment {
                     payButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String momoNumber = mNumber.getText().toString();
+                            if(!TextUtils.isEmpty(mNumber.getText().toString()))
+                            {
 
-                            //Payment of platform charge url
-                            //chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
-                            chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
-                            //Payment of ticket fare url
-                            fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
-                            //Make ticket charge payment
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                            builder.setTitle(getResources().getString(R.string.disclaimer));
-                            builder.setMessage(getResources().getString(R.string.disclaimer_text)).setPositiveButton(getResources().getString(R.string.i_accept), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialog.dismiss();
-                                    if (pref.contains(TICKET_CODE)){
-                                        //Process transport payment here
-                                        ticketCode = pref.getString(TICKET_CODE, null);
-                                        processTranPayment(fareUrlRequest, ticketCode);
-                                    }else {
-                                        //Process fare payment first
-                                        PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
-                                            @Override
-                                            public void onCompleted(String response, String msg) {
-                                                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-                                                Log.d("PaymentTask", response);
-                                                try {
-                                                    JSONObject json = new JSONObject(response);
-                                                    ticketCode = json.getString("TransactionID");
-                                                    String status = json.getString("StatusCode");
-                                                    if(status.equals("01")){
-                                                        SharedPreferences.Editor editor = pref.edit();
-                                                        editor.putString(TICKET_CODE, ticketCode);
-                                                        editor.apply();
-                                                        processTranPayment(fareUrlRequest, ticketCode);
-                                                    }else {
-                                                        Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                                String momoNumber = mNumber.getText().toString();
+
+                                //Payment of platform charge url
+                                //chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
+                                chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
+                                //Payment of ticket fare url
+                                //fareUrlRequest = paymentUrl(tprice, momoNumber, branchPass, branchEmail);
+                                fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
+                                //Make ticket charge payment
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                builder.setTitle(getResources().getString(R.string.disclaimer));
+                                builder.setMessage(getResources().getString(R.string.disclaimer_text)).setPositiveButton(getResources().getString(R.string.i_accept), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialog.dismiss();
+                                        if (pref.contains(TICKET_CODE)){
+                                            //Process transport payment here
+                                            ticketCode = pref.getString(TICKET_CODE, null);
+                                            processTranPayment(fareUrlRequest, ticketCode);
+                                        }else {
+                                            //Process fare payment first
+                                            PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
+                                                @Override
+                                                public void onCompleted(String response, String msg) {
+                                                    Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                                    Log.d("PaymentTask", response);
+                                                    try {
+                                                        JSONObject json = new JSONObject(response);
+                                                        ticketCode = json.getString("TransactionID");
+                                                        String status = json.getString("StatusCode");
+                                                        if(status.equals("01")){
+                                                            SharedPreferences.Editor editor = pref.edit();
+                                                            editor.putString(TICKET_CODE, ticketCode);
+                                                            editor.apply();
+
+                                                            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                                            builder .setMessage(ctx.getResources().getString(R.string.trans_dialog))
+                                                                    .setPositiveButton(getResources().getString(R.string.continu), new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                                            dialogInterface.dismiss();
+                                                                            processTranPayment(fareUrlRequest, ticketCode);
+                                                                        }
+                                                                    })
+                                                                    .setCancelable(false);
+                                                            AlertDialog alertDialog = builder.create();
+                                                            alertDialog.show();
+                                                        }else {
+                                                            Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
                                                     }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
                                                 }
-                                            }
 
-                                            @Override
-                                            public void onFailure(String msg) {
-                                                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                        chargeTask.execute();
+                                                @Override
+                                                public void onFailure(String msg) {
+                                                    Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                            chargeTask.execute();
+                                        }
+
                                     }
+                                }).setNegativeButton(getResources().getString(R.string.i_decline), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialog.dismiss();
+                                    }
+                                });
 
-                                }
-                            }).setNegativeButton(getResources().getString(R.string.i_decline), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialog.dismiss();
-                                }
-                            });
+                                final AlertDialog dialog = builder.create();
+                                dialog.show();
 
-                            final AlertDialog dialog = builder.create();
-                            dialog.show();
+                            }
+                            else
+                            {
+                                Toast.makeText(ctx, getResources().getText(R.string.momonumber_error), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }
@@ -294,12 +321,7 @@ public class VIPConfirmFragment extends Fragment {
                         //Sending ticket online to firebase
                         sendTicketOnline(mTicket);
 
-                        //Sending to local storage using room database
-                        try{
-                            myTicketViewModel.insert(mTicket);
-                        }catch (Exception e){
-                            Log.d("Insert", "Error Inserting ticket: "+e.getMessage());
-                        }
+
 
                         //deleting ticket code from shared preferences
                         SharedPreferences.Editor editor = pref.edit();
@@ -354,7 +376,11 @@ public class VIPConfirmFragment extends Fragment {
 
         nameTextView.setText(pName);
         numberTextView.setText(pNum);
-        idTextView.setText(pId);
+        if(pId.equals("1")){
+            idTextView.setText(ctx.getResources().getText(R.string.no_idcard));
+        }else{
+            idTextView.setText(pId);
+        }
         chargeTextView.setText(String.valueOf(bCharge) + "FCFA");
         timeTextView.setText(time);
 
@@ -429,8 +455,29 @@ public class VIPConfirmFragment extends Fragment {
 
     }
 
-    private void sendTicketOnline(Ticket mTicket){
-        mDatabase.child("vt").child(ticketCode).setValue(mTicket);
+    private void sendTicketOnline(final Ticket mTicket){
+
+        final ProgressDialog pd = new ProgressDialog(ctx);
+        pd.setMessage(ctx.getResources().getString(R.string.please_wait));
+        pd.setCancelable(false);
+        pd.setCanceledOnTouchOutside(false);
+        pd.show(); mDatabase.child("vt").child(ticketCode).setValue(mTicket).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                //Sending to local storage using room database
+                try{
+                    myTicketViewModel.insert(mTicket);
+                }catch (Exception e){
+                    Log.d("Insert", "Error Inserting ticket: "+e.getMessage());
+                }
+                pd.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder .setMessage(ctx.getResources().getString(R.string.completed_text))
+                        .setTitle(ctx.getResources().getString(R.string.completed));
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
 }

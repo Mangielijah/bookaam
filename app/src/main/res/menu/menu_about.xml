@@ -13,9 +13,4 @@
         android:title="@string/privacy_policy"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_disclaimer"
-        android:orderInCategory="100"
-        android:title="@string/disclaimer"
-        app:showAsAction="never" />
 </menu>

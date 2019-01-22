@@ -35,14 +35,10 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Checking for first time launch - before calling setContentView
-        Intent intent = getIntent();
-        boolean demoStats = intent.getBooleanExtra("DEMO", false);
         prefManager = new PrefManager(this);
         if(!prefManager.isFirstTimeLaunch()){
-            if(demoStats){
-                launchHomeScreen();
-                finish();
-            }
+            launchHomeScreen();
+            finish();
         }
 
         //Make notification bar transperent
