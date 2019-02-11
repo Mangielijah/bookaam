@@ -24,6 +24,7 @@ public class SmsReceiver extends BroadcastReceiver {
         if (bundle != null) {
             Object[] pdus = (Object[]) bundle.get("pdus");
             String format = bundle.getString("3gpp");
+            assert pdus != null;
             final SmsMessage[] messages = new SmsMessage[pdus.length];
             for (int i = 0; i < pdus.length; i++) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -3,7 +3,6 @@ package com.omenacle.bookaam;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,27 +18,16 @@ import android.view.WindowManager;
 import com.omenacle.bookaam.BookingFragment.ConfirmFragment;
 import com.omenacle.bookaam.BookingFragment.LocationFragment;
 import com.omenacle.bookaam.BookingFragment.UserInfoFragment;
+import com.omenacle.bookaam.DataClasses.Seats;
 
 import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_KEY;
 import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_NAME;
 
 
-public class BookingActivity extends AppCompatActivity implements LocationFragment.OnLocationListener, ViewPager.OnPageChangeListener, UserInfoFragment.OnUserInfoListener, ConfirmFragment.OnConfirmTicketListener {
+public class BookingActivity extends AppCompatActivity implements LocationFragment.OnLocationListener, ViewPager.OnPageChangeListener, UserInfoFragment.OnUserInfoListener {
 
-    public static  String P_NAME = "P_NAME";
-    public static  String P_NUM = "P_NUM";
-    public static  String P_ID = "P_ID";
     public static  String PRICE = "PRICE";
     public static  String ROUTE = "ROUTE";
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentStatePagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -48,9 +36,11 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
     String agency_name, agency_key, route, passengerName, passengerNumber, passengerId;
     String travelTime, travelDate;
     long  ticketPrice;
+    Seats routeSeats = null;
     //bookaam info
     long bCharge, bNum;
     String bEmail, bPass;
+    ConfirmFragment confirmFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +66,22 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentStatePagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.b_viewPager);
+        mViewPager = findViewById(R.id.b_viewPager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(1);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.booking_nav_menu);
+        TabLayout tabLayout = findViewById(R.id.booking_nav_menu);
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -108,12 +106,13 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
 
 
     @Override
-    public void onSendLocation(String location, long fare, String travel_time) {
+    public void onSendLocation(String location, long fare, String travel_time, Seats seats) {
         //Here we have to send the location to the UserInfoFragment
         Log.d("onSendLocation", location);
         this.route = location;
         this.ticketPrice = fare;
         this.travelTime = travel_time;
+        routeSeats = seats;
         mViewPager.setCurrentItem(1);
         UserInfoFragment.newInstance(travel_time);
     }
@@ -132,13 +131,9 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
         bPass = bookaamP;
 
         mViewPager.setCurrentItem(2);
-        ConfirmFragment.updateConfirmFragment(passengerName, passengerNumber, passengerId, time, day, bCharge, bNum, bEmail, bPass);
+        confirmFragment.updateConfirmFragment(passengerName, passengerNumber, passengerId, travelTime, travelDate, bCharge, bNum, bEmail, bPass, routeSeats);
     }
 
-    @Override
-    public void onBookTicket(String ticketCode) {
-
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -173,7 +168,7 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
      */
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -191,7 +186,7 @@ public class BookingActivity extends AppCompatActivity implements LocationFragme
                     break;
                 case 2:
                     setActionBarTitle(getResources().getString(R.string.confirm_pay));
-                    fragment = ConfirmFragment.newInstance(agency_name, agency_key, route, ticketPrice);
+                    fragment = confirmFragment = ConfirmFragment.newInstance(agency_name, agency_key, route, ticketPrice);
                     break;
             }
             return fragment;

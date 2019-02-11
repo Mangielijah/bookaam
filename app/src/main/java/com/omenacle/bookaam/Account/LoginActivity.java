@@ -40,12 +40,9 @@ import com.omenacle.bookaam.MainActivity;
 import com.omenacle.bookaam.R;
 
 public class LoginActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth, gAuth;
+    private FirebaseAuth mAuth;
 
     private TextInputEditText emailEditText, passwordEditText;
-    private Button loginButton;
-    private TextView forgotTextView, createAccountTextView;
-    private SignInButton googleSignInButton;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
 
@@ -96,10 +93,10 @@ public class LoginActivity extends AppCompatActivity {
         //Initializing views
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
-        forgotTextView = findViewById(R.id.forgot_password);
-        createAccountTextView = findViewById(R.id.create_acc_textview);
-        loginButton = findViewById(R.id.login_button);
-        googleSignInButton = findViewById(R.id.login_google);
+        TextView forgotTextView = findViewById(R.id.forgot_password);
+        TextView createAccountTextView = findViewById(R.id.create_acc_textview);
+        Button loginButton = findViewById(R.id.login_button);
+        SignInButton googleSignInButton = findViewById(R.id.login_google);
         setGooglePlusButtonText(googleSignInButton, getResources().getString(R.string.sign_in_with_google));
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -195,8 +192,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void reset(String resetEmail) {
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -216,12 +212,12 @@ public class LoginActivity extends AppCompatActivity {
             // Google Sign In was successful, authenticate with Firebase
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if (account != null) {
-                Log.d("GoogleSignIn", "Account: "+ account.getEmail());
+                //Log.d("GoogleSignIn", "Account: "+ account.getEmail());
                 firebaseAuthWithGoogle(account);
             }
         } catch (ApiException e) {
             // Google Sign In failed, update UI appropriately
-            Log.w("GoogleSignIn", "Google sign in failed: ", e);            //show toast
+            //Log.w("GoogleSignIn", "Google sign in failed: ", e);            //show toast
             Toast.makeText(this, getResources().getText(R.string.log_failed), Toast.LENGTH_SHORT).show();
             // ...
         }
@@ -229,7 +225,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
-        Log.d("GoogleSignIn", "firebaseAuthWithGoogle:" + acct.getId());
+        //Log.d("GoogleSignIn", "firebaseAuthWithGoogle:" + acct.getId());
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.log_user));
         progressDialog.setCanceledOnTouchOutside(false);
@@ -243,12 +239,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("GoogleSignIn", "signInWithCredential:success");
+                            //Log.d("GoogleSignIn", "signInWithCredential:success");
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("GoogleSignIn", "signInWithCredential:failure", task.getException());
+                            //Log.w("GoogleSignIn", "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.main_layout), getResources().getText(R.string.log_failed), Snackbar.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
@@ -261,7 +257,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signInWithEmailandPass(String email, String password) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        Log.d("Login Activity:", email +" : "+ password);
         progressDialog.setMessage(getResources().getString(R.string.log_user));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
@@ -275,13 +270,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("LoginActivity", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            //FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, getResources().getText(R.string.log_failed),
                                     Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();

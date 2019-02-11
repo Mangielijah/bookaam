@@ -6,8 +6,8 @@ android {
         applicationId "com.omenacle.bookaam"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 6
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
 // Room components
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"

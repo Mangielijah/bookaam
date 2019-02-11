@@ -7,7 +7,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
-import com.omenacle.bookaam.Account.LoginActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

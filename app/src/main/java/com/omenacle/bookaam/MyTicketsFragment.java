@@ -11,14 +11,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.omenacle.bookaam.DataClasses.Ticket;
@@ -43,7 +41,7 @@ public class MyTicketsFragment extends Fragment {
     TicketListAdapter adapter;
     MyTicketViewModel myTicketViewModel;
     TextView mTextView;
-
+    Context ctx;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -59,15 +57,16 @@ public class MyTicketsFragment extends Fragment {
         myTicketViewModel.getSearchResults().observe(this, new Observer<List<Ticket>>() {
             @Override
             public void onChanged(@Nullable List<Ticket> tickets) {
-                Log.d("Tickets", tickets.toString());
                 adapter.setTicketList(tickets);
 
-                if(tickets.size() < 1){
-                    myTicketRecycler.setVisibility(View.GONE);
-                    mTextView.setVisibility(View.VISIBLE);
-                }else {
-                    myTicketRecycler.setVisibility(View.VISIBLE);
-                    mTextView.setVisibility(View.GONE);
+                if (tickets != null) {
+                    if(tickets.size() < 1){
+                        myTicketRecycler.setVisibility(View.GONE);
+                        mTextView.setVisibility(View.VISIBLE);
+                    }else {
+                        myTicketRecycler.setVisibility(View.VISIBLE);
+                        mTextView.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -77,6 +76,7 @@ public class MyTicketsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_my_tickets, container, false);
 
         RelativeLayout homeLayout = view.findViewById(R.id.myTicketFragment);
@@ -96,20 +96,20 @@ public class MyTicketsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getActivity().getSharedPreferences("ticket", Context.MODE_PRIVATE);
-
+        ctx = getContext();
         String VIP_TICKET_CODE = "VIP_TICKET_CODE";
         String CLASSIC_TICKET_CODE = "CLASSIC_TICKET_CODE";
 
         if(pref.contains(VIP_TICKET_CODE)){
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder .setMessage(getContext().getResources().getString(R.string.incomplete_ticket));
+            builder .setMessage(ctx.getResources().getString(R.string.incomplete_vip_ticket));
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
 
         if (pref.contains(CLASSIC_TICKET_CODE)){
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder .setMessage(getContext().getResources().getString(R.string.incomplete_ticket));
+            builder .setMessage(ctx.getResources().getString(R.string.incomplete_ticket));
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }

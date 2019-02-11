@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
@@ -34,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.omenacle.bookaam.Account.LoginActivity;
 import com.omenacle.bookaam.DataClasses.BranchInfo;
+import com.omenacle.bookaam.DataClasses.Seats;
 import com.omenacle.bookaam.DataClasses.Ticket;
 import com.omenacle.bookaam.MyTicketViewModel;
 import com.omenacle.bookaam.OnGetFirebaseDataListener;
@@ -44,7 +46,6 @@ import com.omenacle.bookaam.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -60,34 +61,29 @@ import static com.omenacle.bookaam.BookingActivity.ROUTE;
 public class ConfirmFragment extends Fragment {
 
 
-    private static String agency_name, agency_key, p_name, p_num, p_id, troute, email, pass, travelTime, travelDay;
-    private static long tprice, tcharge, num;
+    private String agency_name, agency_key, p_name, p_num, p_id, troute, email, pass, travelTime, travelDay, tday;
+    private long tprice;
+    private long tcharge;
     private String branchEmail, branchPass;
-    private long branchNum;
 
-    @SuppressLint("StaticFieldLeak")
-    private static Context ctx;
+    private Context ctx;
     ProgressDialog pd;
 
-    private OnConfirmTicketListener listener;
     private DatabaseReference mDatabase;
 
     Button btnPay;
 
-    private static AppCompatTextView nameTextView;
-    private static AppCompatTextView numberTextView;
-    private static AppCompatTextView routeTextView;
-    private static AppCompatTextView idTextView;
-    private static AppCompatTextView agencyTextView;
-    private static AppCompatTextView timeTextView;
-    private static AppCompatTextView dateTextView;
-    private static AppCompatTextView dateTravelTextView;
-    private static AppCompatTextView priceTextView;
-    private static AppCompatTextView chargeTextView;
+    private  AppCompatTextView nameTextView;
+    private  AppCompatTextView numberTextView;
+    private  AppCompatTextView idTextView;
+    private  AppCompatTextView timeTextView;
+    private  AppCompatTextView dateTextView;
+    private  AppCompatTextView dateTravelTextView;
+    private  AppCompatTextView chargeTextView;
     private static String TICKET_CODE = "CLASSIC_TICKET_CODE";
-    private String fareUrlRequest, chargeUrlRequest;
-    String ticketCode;
+    private String fareUrlRequest, chargeUrlRequest, ticketCode;
     private SharedPreferences pref;
+    private Seats routeSeat = null;
 
     private MyTicketViewModel myTicketViewModel;
 
@@ -102,6 +98,7 @@ public class ConfirmFragment extends Fragment {
         args.putString(AGENCY_KEY, agencyKey);
         args.putLong(PRICE, price);
         args.putString(ROUTE, route);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -145,7 +142,7 @@ public class ConfirmFragment extends Fragment {
                 if (mBranch != null){
                     branchEmail = mBranch.getE();
                     branchPass = mBranch.getP();
-                    branchNum = mBranch.getN();
+                    long branchNum = mBranch.getN();
                 }
             }
 
@@ -167,7 +164,7 @@ public class ConfirmFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_confirm, container, false);
+        final View view = inflater.inflate(R.layout.fragment_confirm, container, false);
 
         Log.d("OncreateView", "Oncreate view ConfirmFragment");
 
@@ -176,12 +173,12 @@ public class ConfirmFragment extends Fragment {
         nameTextView = view.findViewById(R.id.name_ticket_holder);
         numberTextView = view.findViewById(R.id.holder_number);
         idTextView = view.findViewById(R.id.holder_nid);
-        agencyTextView = view.findViewById(R.id.agency_booked);
+        AppCompatTextView agencyTextView = view.findViewById(R.id.agency_booked);
         dateTextView = view.findViewById(R.id.date);
         dateTravelTextView = view.findViewById(R.id.departure_date);
         timeTextView = view.findViewById(R.id.departure_time);
-        priceTextView = view.findViewById(R.id.ticket_price);
-        routeTextView = view.findViewById(R.id.ticket_location);
+        AppCompatTextView priceTextView = view.findViewById(R.id.ticket_price);
+        AppCompatTextView routeTextView = view.findViewById(R.id.ticket_location);
         chargeTextView = view.findViewById(R.id.charge);
 
 
@@ -195,104 +192,231 @@ public class ConfirmFragment extends Fragment {
             public void onClick(View v) {
                 FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
                 if(mCurrentUser != null){
-                    AlertDialog.Builder dBuilder = new AlertDialog.Builder(getContext());
-                    final View dialogView = getLayoutInflater().inflate(R.layout.payment_dialog, null);
-                    final TextInputEditText mNumber = dialogView.findViewById(R.id.momo_number);
-                    Button payButton = dialogView.findViewById(R.id.btn_pay);
-                    dBuilder.setView(dialogView);
-                    final AlertDialog dialog = dBuilder.create();
-                    dialog.show();
-                    payButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(!TextUtils.isEmpty(mNumber.getText().toString()))
-                            {
-                                String momoNumber = mNumber.getText().toString();
+                    if (routeSeat != null && tday.equals("Today"))
+                    {
+                        boolean availableSeat = false;
+                        if(travelTime.contains("morning") && routeSeat.getM() > 0)
+                        {
+                            availableSeat = true;
+                        }
+                        else if(travelTime.contains("afternoon") && routeSeat.getA() > 0)
+                        {
+                            availableSeat = true;
+                        }
+                        else if(travelTime.contains("night") && routeSeat.getN() > 0)
+                        {
+                            availableSeat = true;
+                        }
 
-                                //Payment of platform charge url
-                                //chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
-                                chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
-                                //Payment of ticket fare url
-                                //fareUrlRequest = paymentUrl(tprice, momoNumber, branchPass, branchEmail);
-                                fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
-                                //Make ticket charge payment
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                                builder.setTitle(getResources().getString(R.string.disclaimer));
-                                builder.setMessage(getResources().getString(R.string.disclaimer_text)).
+                        if (availableSeat){
 
-                                        setPositiveButton("I ACCEPT", new DialogInterface.OnClickListener() {
+                            AlertDialog.Builder dBuilder = new AlertDialog.Builder(getContext());
+                            @SuppressLint("InflateParams")
+                            final View dialogView = getLayoutInflater().inflate(R.layout.payment_dialog, null);
+                            final TextInputEditText mNumber = dialogView.findViewById(R.id.momo_number);
+                            Button payButton = dialogView.findViewById(R.id.btn_pay);
+                            dBuilder.setView(dialogView);
+                            final AlertDialog dialog = dBuilder.create();
+                            dialog.show();
+                            payButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if(!TextUtils.isEmpty(mNumber.getText().toString()))
+                                    {
+                                        String momoNumber = mNumber.getText().toString();
+
+                                        //Payment of platform charge url
+                                        chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
+                                        //chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
+                                        //Payment of ticket fare url
+                                        fareUrlRequest = paymentUrl(tprice, momoNumber, branchPass, branchEmail);
+                                        //fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
+                                        //Make ticket charge payment
+                                        final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                        builder.setTitle(getResources().getString(R.string.disclaimer));
+                                        builder.setMessage(getResources().getString(R.string.disclaimer_text)).
+
+                                                setPositiveButton("I ACCEPT", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        dialog.dismiss();
+                                                        if (pref.contains(TICKET_CODE)){
+                                                            //Process transport payment here
+                                                            ticketCode = pref.getString(TICKET_CODE, null);
+                                                            processTranPayment(fareUrlRequest, ticketCode);
+                                                        } else {
+                                                            //Process fare payment first
+                                                            PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
+                                                                @Override
+                                                                public void onCompleted(String response, String msg) {
+                                                                    Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                                                    Log.d("PaymentTask", response);
+                                                                    try {
+                                                                        JSONObject json = new JSONObject(response);
+                                                                        ticketCode = json.getString("TransactionID");
+                                                                        String status = json.getString("StatusCode");
+                                                                        Log.d("PaymentTaskStatus", status);
+                                                                        if(status.equals("01")){
+                                                                            SharedPreferences.Editor editor = pref.edit();
+                                                                            editor.putString(TICKET_CODE, ticketCode);
+                                                                            editor.apply();
+
+                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                                                            builder .setMessage(ctx.getResources().getString(R.string.trans_dialog))
+                                                                                    .setPositiveButton(getResources().getString(R.string.continu), new DialogInterface.OnClickListener() {
+                                                                                        @Override
+                                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                                                            dialogInterface.dismiss();
+                                                                                            processTranPayment(fareUrlRequest, ticketCode);
+                                                                                        }
+                                                                                    })
+                                                                                    .setCancelable(false);
+                                                                            AlertDialog alertDialog = builder.create();
+                                                                            alertDialog.show();
+
+                                                                        }
+                                                                        else {
+                                                                            Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    } catch (JSONException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onFailure(String msg) {
+                                                                    Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
+                                                            chargeTask.execute();
+                                                        }
+
+                                                    }
+                                                }).setNegativeButton("DECLINE", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 dialog.dismiss();
-                                                if (pref.contains(TICKET_CODE)){
-                                                    //Process transport payment here
-                                                    ticketCode = pref.getString(TICKET_CODE, null);
-                                                    processTranPayment(fareUrlRequest, ticketCode);
-                                                } else {
-                                                    //Process fare payment first
-                                                    PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
-                                                        @Override
-                                                        public void onCompleted(String response, String msg) {
-                                                            Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-                                                            Log.d("PaymentTask", response);
-                                                            try {
-                                                                JSONObject json = new JSONObject(response);
-                                                                ticketCode = json.getString("TransactionID");
-                                                                String status = json.getString("StatusCode");
-                                                                Log.d("PaymentTaskStatus", status);
-                                                                if(status.equals("01")){
-                                                                    SharedPreferences.Editor editor = pref.edit();
-                                                                    editor.putString(TICKET_CODE, ticketCode);
-                                                                    editor.apply();
-
-                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                                                                    builder .setMessage(ctx.getResources().getString(R.string.trans_dialog))
-                                                                            .setPositiveButton(getResources().getString(R.string.continu), new DialogInterface.OnClickListener() {
-                                                                                @Override
-                                                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                                                    dialogInterface.dismiss();
-                                                                                    processTranPayment(fareUrlRequest, ticketCode);
-                                                                                }
-                                                                            })
-                                                                            .setCancelable(false);
-                                                                    AlertDialog alertDialog = builder.create();
-                                                                    alertDialog.show();
-
-                                                                }
-                                                                else {
-                                                                    Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onFailure(String msg) {
-                                                            Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-                                                        }
-                                                    });
-                                                    chargeTask.execute();
-                                                }
-
                                             }
-                                        }).setNegativeButton("DECLINE", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialog.dismiss();
+                                        });
+
+                                        final AlertDialog dialog = builder.create();
+                                        dialog.show();
+
                                     }
-                                });
-
-                                final AlertDialog dialog = builder.create();
-                                dialog.show();
-
-                            }
-                            else
-                            {
-                                Toast.makeText(ctx, getResources().getText(R.string.momonumber_error), Toast.LENGTH_SHORT).show();
-                            }
+                                    else
+                                    {
+                                        Toast.makeText(ctx, getResources().getText(R.string.momonumber_error), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
-                    });
+                        else {
+                            Snackbar.make(view, getResources().getText(R.string.no_seat), Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        //Handle tomorow transactions
+                        AlertDialog.Builder dBuilder = new AlertDialog.Builder(getContext());
+                        @SuppressLint("InflateParams")
+                        final View dialogView = getLayoutInflater().inflate(R.layout.payment_dialog, null);
+                        final TextInputEditText mNumber = dialogView.findViewById(R.id.momo_number);
+                        Button payButton = dialogView.findViewById(R.id.btn_pay);
+                        dBuilder.setView(dialogView);
+                        final AlertDialog dialog = dBuilder.create();
+                        dialog.show();
+                        payButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(!TextUtils.isEmpty(mNumber.getText().toString()))
+                                {
+                                    String momoNumber = mNumber.getText().toString();
+
+                                    //Payment of platform charge url
+                                    chargeUrlRequest = paymentUrl(tcharge, momoNumber, pass, email);
+                                    //chargeUrlRequest = paymentUrl(1, momoNumber, pass, email);
+                                    //Payment of ticket fare url
+                                    fareUrlRequest = paymentUrl(tprice, momoNumber, branchPass, branchEmail);
+                                    //fareUrlRequest = paymentUrl(1, momoNumber, branchPass, branchEmail);
+                                    //Make ticket charge payment
+                                    final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                    builder.setTitle(getResources().getString(R.string.disclaimer));
+                                    builder.setMessage(getResources().getString(R.string.disclaimer_text)).
+
+                                            setPositiveButton("I ACCEPT", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialog.dismiss();
+                                                    if (pref.contains(TICKET_CODE)){
+                                                        //Process transport payment here
+                                                        ticketCode = pref.getString(TICKET_CODE, null);
+                                                        processTranPayment(fareUrlRequest, ticketCode);
+                                                    } else {
+                                                        //Process fare payment first
+                                                        PaymentTask chargeTask = new PaymentTask(ctx, chargeUrlRequest, "Platform Charge", new OnPaymentMade() {
+                                                            @Override
+                                                            public void onCompleted(String response, String msg) {
+                                                                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                                                Log.d("PaymentTask", response);
+                                                                try {
+                                                                    JSONObject json = new JSONObject(response);
+                                                                    ticketCode = json.getString("TransactionID");
+                                                                    String status = json.getString("StatusCode");
+                                                                    Log.d("PaymentTaskStatus", status);
+                                                                    if(status.equals("01")){
+                                                                        SharedPreferences.Editor editor = pref.edit();
+                                                                        editor.putString(TICKET_CODE, ticketCode);
+                                                                        editor.apply();
+
+                                                                        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                                                        builder .setMessage(ctx.getResources().getString(R.string.trans_dialog))
+                                                                                .setPositiveButton(getResources().getString(R.string.continu), new DialogInterface.OnClickListener() {
+                                                                                    @Override
+                                                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                                                        dialogInterface.dismiss();
+                                                                                        processTranPayment(fareUrlRequest, ticketCode);
+                                                                                    }
+                                                                                })
+                                                                                .setCancelable(false);
+                                                                        AlertDialog alertDialog = builder.create();
+                                                                        alertDialog.show();
+
+                                                                    }
+                                                                    else {
+                                                                        Toast.makeText(ctx, "Transaction Error", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(String msg) {
+                                                                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
+                                                        chargeTask.execute();
+                                                    }
+
+                                                }
+                                            }).setNegativeButton("DECLINE", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+
+                                    final AlertDialog dialog = builder.create();
+                                    dialog.show();
+
+                                }
+                                else
+                                {
+                                    Toast.makeText(ctx, getResources().getText(R.string.momonumber_error), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
                 }
                 else {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -350,37 +474,19 @@ public class ConfirmFragment extends Fragment {
         fareTask.execute();
     }
 
-    public interface OnConfirmTicketListener{
-        void onBookTicket(String ticketCode);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnConfirmTicketListener){
-            listener = (OnConfirmTicketListener) context;
-        }else{
-            throw new RuntimeException(context.toString()
-                + " must implement OnConfirmTicketListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
 
     @SuppressLint("SetTextI18n")
-    public static void updateConfirmFragment(String pName, String pNum, String pId, String time, String day, long bCharge, long bNum, String bEmail, String bPass) {
+    public void updateConfirmFragment(String pName, String pNum, String pId, String time, String day, long bCharge, long bNum, String bEmail, String bPass, Seats routeSeats) {
        p_name = pName;
        p_num = pNum;
        p_id = pId;
        tcharge = bCharge;
-       num = bNum;
+       long num = bNum;
        email = bEmail;
        pass = bPass;
        travelTime = time;
+       tday = day;
+       routeSeat = routeSeats;
 
         nameTextView.setText(pName);
         numberTextView.setText(pNum);
@@ -474,6 +580,25 @@ public class ConfirmFragment extends Fragment {
         mDatabase.child("t").child(ticketCode).setValue(mTicket).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                //Update ticket seats
+                if (tday.equals("Today") && routeSeat != null)
+                {
+                    Seats newSeat = routeSeat;
+                    if(travelTime.contains("morning"))
+                    {
+                        newSeat.setM(routeSeat.getM() - 1);
+                    }
+                    else if(travelTime.contains("afternoon"))
+                    {
+                        newSeat.setA(routeSeat.getA() - 1);
+                    }
+                    else if(travelTime.contains("night"))
+                    {
+                        newSeat.setN(routeSeat.getN() - 1);
+                    }
+
+                    mDatabase.child("s").child(routeSeat.getR_k()).setValue(newSeat);
+                }
 
                 //Sending to local storage using room database
                 try{

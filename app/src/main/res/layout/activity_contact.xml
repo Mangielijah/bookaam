@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ContactActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        app:title="@string/app_name"
+        app:titleTextColor="@color/white"
+        app:fontFamily="@font/berlin_sans_fb_regular"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_us"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="34sp"
+                app:fontFamily="@font/berlin_sans_fb_regular"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/call_us_on_237_672_084_140"
+                android:textSize="18sp"
+                android:textColor="@color/colorSecondaryText"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/email_us_support_bookaam_com"
+                android:textSize="18sp"
+                android:textColor="@color/colorSecondaryText"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="24sp"
+                android:text="@string/send_us_a_message"
+                android:background="@drawable/nav_header_border"
+                app:fontFamily="@font/berlin_sans_fb_regular"/>
+
+            <EditText
+                android:id="@+id/messageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:inputType="textMultiLine"
+                android:hint="@string/enter_a_message"
+                android:gravity="left|top"
+                android:lines="7"
+                android:maxLines="10"
+                android:textColorHint="@color/white"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:scrollbars="vertical"
+                android:padding="8dp"
+                app:fontFamily="@font/berlin_sans_fb_regular"
+                tools:ignore="RtlHardcoded" />
+            <Button
+                android:id="@+id/messageBtn"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:background="@drawable/send_btn_bkg"
+                android:textColor="@color/colorPrimaryText"
+                android:text="@string/send"
+                android:textSize="24sp"
+                android:textAllCaps="false"
+                android:layout_marginTop="8dp"
+                android:onClick="sendMessage"/>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

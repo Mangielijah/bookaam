@@ -1,7 +1,11 @@
 package com.omenacle.bookaam;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -28,6 +32,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.omenacle.bookaam.Account.LoginActivity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -58,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Kill background processes
+        killBackgroundProcesses();
+
         setContentView(R.layout.activity_main);
 
         mDrawerLayout = findViewById(R.id.drawerLayout);
@@ -133,6 +143,11 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         return true;
+                    case R.id.nav_contact:
+                        startActivity(new Intent(MainActivity.this, ContactActivity.class));
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
                     case R.id.nav_about:
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
                         menuItem.setChecked(true);
@@ -181,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
             if (doubleBackToExitPressedOnce) {
                 finish();
-                return;
             }else{
 
                 doubleBackToExitPressedOnce = true;
@@ -218,5 +232,30 @@ public class MainActivity extends AppCompatActivity {
         sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.text_to_share));
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
+    }
+
+    private void killBackgroundProcesses()
+    {
+        List<ApplicationInfo> packages;
+        PackageManager pm;
+        pm = getPackageManager();
+
+        //get a list of installed apps.
+        packages = pm.getInstalledApplications(0);
+
+        ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ApplicationInfo packageInfo : packages) {
+            if((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM)==1){
+                if(!packageInfo.packageName.equals("com.omenacle.bookaam")){
+                    Log.d("PackageName", packageInfo.packageName);
+                    mActivityManager.killBackgroundProcesses(packageInfo.packageName);
+                }
+            }
+        }
+
+
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();
     }
 }

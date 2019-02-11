@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.omenacle.bookaam.DataClasses.Seats;
 import com.omenacle.bookaam.ListAdapters.LocationListAdapter;
 import com.omenacle.bookaam.OnGetFirebaseDataListener;
 import com.omenacle.bookaam.R;
@@ -50,6 +52,7 @@ public class LocationFragment extends Fragment {
     LocationListAdapter locationListAdapter;
     ProgressDialog pd;
     List<Route> mRouteList = new ArrayList<>();
+    List<Seats> mSeatList = new ArrayList<>();
 
     public static LocationFragment newInstance(String key, String name) {
         LocationFragment fragment = new LocationFragment();
@@ -71,57 +74,47 @@ public class LocationFragment extends Fragment {
         }
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("r").keepSynced(true);
-        if(mRouteList.isEmpty()){
-        /*
 
-            Getting the routes from firebase online and adding it
-            to the list of routes
+        getRoutes(new OnGetFirebaseDataListener() {
+            @Override
+            public void onStart() {
+                pd = new ProgressDialog(getContext());
+                pd.setTitle(getResources().getString(R.string.fetching_routes_available));
+                pd.setMessage(getResources().getString(R.string.please_wait));
+                pd.setCancelable(true);
+                pd.setCanceledOnTouchOutside(false);
+                pd.show();
+            }
 
-         */
-            getRoutes(new OnGetFirebaseDataListener() {
-                @Override
-                public void onStart() {
-                    pd = new ProgressDialog(getContext());
-                    pd.setTitle(getResources().getString(R.string.fetching_routes_available));
-                    pd.setMessage(getResources().getString(R.string.please_wait));
-                    pd.setCancelable(true);
-                    pd.setCanceledOnTouchOutside(false);
-                    pd.show();
-                }
-
-                @Override
-                public void onSuccess(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot routeSnapshot : dataSnapshot.getChildren()){
-                        Route mRoute = routeSnapshot.getValue(Route.class);
-                        Log.d("LocationFragment", mRoute.toString());
-                        if(mRoute != null){
-                            if (mRoute.getA_k().equals(agency_key)){
-                                mRouteList.add(mRoute);
-                            }
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                mRouteList.clear();
+                for (DataSnapshot routeSnapshot : dataSnapshot.getChildren()){
+                    Route mRoute = routeSnapshot.getValue(Route.class);
+                    if(mRoute != null){
+                        if (mRoute.getA_k().equals(agency_key)){
+                            mRouteList.add(mRoute);
                         }
                     }
-
-                    Toast.makeText(getContext(),getResources().getString(R.string.select_route), Toast.LENGTH_LONG).show();
-                    //If route list is not empty
-                    if (mRouteList != null){
-                        Log.d("RouteList", mRouteList.toString());
-                        locationListAdapter.notifyDataSetChanged();
-                    }
-
-                    pd.dismiss();
                 }
 
-                @Override
-                public void onFailure(String errorMessage) {
-                    Log.d("LocationError", errorMessage);
-                    pd.dismiss();
+                Toast.makeText(getContext(),getResources().getString(R.string.select_route), Toast.LENGTH_LONG).show();
+                //If route list is not empty
+                if (mRouteList != null){
+                    locationListAdapter.notifyDataSetChanged();
                 }
-            });
 
-        }
-        else{
+                pd.dismiss();
+            }
 
-        }
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.d("LocationError", errorMessage);
+                pd.dismiss();
+            }
+        });
+
+        getSeats();
     }
 
     @Override
@@ -136,7 +129,7 @@ public class LocationFragment extends Fragment {
         locationRecyclerView = view.findViewById(R.id.locationRecyclerView);
         locationRecyclerView.setHasFixedSize(true);
         locationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        locationListAdapter = new LocationListAdapter(mRouteList, locationRecyclerView, onLocationListener);
+        locationListAdapter = new LocationListAdapter(mRouteList, mSeatList, locationRecyclerView, onLocationListener);
         locationRecyclerView.setAdapter(locationListAdapter);
 
         return view;
@@ -158,8 +151,61 @@ public class LocationFragment extends Fragment {
         mDatabase.child("r").orderByChild("a_k").equalTo(agency_key).addValueEventListener(mGetRouteListListener);
     }
 
+    void getSeats(){
+
+        ChildEventListener mChildEventListenr = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                fetchData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                updateData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        mDatabase.child("s").orderByChild("a_k").equalTo(agency_key).addChildEventListener(mChildEventListenr);
+    }
+
+    private void fetchData(DataSnapshot dataSnapshot) {
+        Seats mSeat = dataSnapshot.getValue(Seats.class);
+
+        if(mSeat != null && mSeat.getA_k().equals(agency_key)){
+            mSeatList.add(mSeat);
+            locationListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void updateData(DataSnapshot dataSnapshot) {
+        Seats mSeat = dataSnapshot.getValue(Seats.class);
+        if(mSeat != null && mSeat.getA_k().equals(agency_key)){
+            for (int i = 0; i < mSeatList.size(); i++){
+                if ( mSeatList.get(i).getR_k().equals(mSeat.getR_k()))
+                {
+                    mSeatList.set(i, mSeat);
+                    locationListAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
     public interface OnLocationListener{
-        void onSendLocation(String location, long price, String travel_time);
+        void onSendLocation(String location, long price, String travel_time, Seats seats);
     }
 
     @Override

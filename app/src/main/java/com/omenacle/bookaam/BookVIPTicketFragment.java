@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.omenacle.bookaam.DataClasses.Agency;
-import com.omenacle.bookaam.ListAdapters.AgencyListAdapter;
 import com.omenacle.bookaam.ListAdapters.VIPAgencyListAdapter;
 
 import java.util.ArrayList;
@@ -49,7 +47,7 @@ public class BookVIPTicketFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("a").keepSynced(true);
-        Log.d("onCreate", "Executing OnCreate Method");
+        //Log.d("onCreate", "Executing OnCreate Method");
             /*
                 Getting agencies from Firebase online and adding too the
                 Bus agency List (mBusAgencyList)
@@ -81,7 +79,7 @@ public class BookVIPTicketFragment extends Fragment {
                     Toast.makeText(getContext(), getResources().getString(R.string.select_agency_from_the_list), Toast.LENGTH_LONG).show();
                     //if Bus Agency List is not null
                     if (mBusAgencyList != null){
-                        Log.d("BusList", mBusAgencyList.toString());
+                        //Log.d("BusList", mBusAgencyList.toString());
                         mAgencyListAdapter.notifyDataSetChanged();
                     }
 
@@ -95,7 +93,7 @@ public class BookVIPTicketFragment extends Fragment {
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    Log.d("Error", errorMessage);
+                    //Log.d("Error", errorMessage);
                     Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_LONG).show();
                     pd.dismiss();
                 }
@@ -109,7 +107,7 @@ public class BookVIPTicketFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        Log.d("onCreateView", "Executing onCreateView Method");
+        //Log.d("onCreateView", "Executing onCreateView Method");
         View view = inflater.inflate(R.layout.fragment_book_ticket, container, false);
         mAgencyRecyclerView = view.findViewById(R.id.agency_recycler_view);
         mAgencyRecyclerView.setHasFixedSize(true);
@@ -130,7 +128,7 @@ public class BookVIPTicketFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("GetAgencyTask", databaseError.getMessage());
+                //Log.d("GetAgencyTask", databaseError.getMessage());
                 listener.onFailure(databaseError.getMessage());
             }
         };

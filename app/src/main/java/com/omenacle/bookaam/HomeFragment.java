@@ -13,11 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +23,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public HomeFragment() {
         // Required empty public constructor
     }
-    private Button mBookBus, mMyTicket, mHistory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,9 +38,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Animation slideRightToLeft = AnimationUtils.loadAnimation(getContext(), R.anim.slide_right_to_left);
         homeLayout.startAnimation(slideRightToLeft);
         //Buttons
-        mBookBus = view.findViewById(R.id.home_book_bus_button);
-        mMyTicket = view.findViewById(R.id.btn_my_tickets);
-        mHistory = view.findViewById(R.id.btn_history);
+        Button mBookBus = view.findViewById(R.id.home_book_bus_button);
+        Button mMyTicket = view.findViewById(R.id.btn_my_tickets);
+        Button mHistory = view.findViewById(R.id.btn_history);
 
         //Setting click listeners to buttons
         mBookBus.setOnClickListener(this);

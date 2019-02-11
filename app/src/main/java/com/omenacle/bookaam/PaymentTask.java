@@ -1,15 +1,10 @@
 package com.omenacle.bookaam;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.IntentFilter;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.omenacle.bookaam.OnPaymentMade;
 
 import org.json.JSONObject;
 
@@ -22,9 +17,7 @@ public class PaymentTask {
     private String url, reason, msg;
     private Context ctx;
     private OnPaymentMade listener;
-    ProgressDialog pd;
-    MySSLSocketFactory sf;
-    BroadcastReceiver broadcastReceiver;
+    private ProgressDialog pd;
 
 
     public PaymentTask(Context ctx, String url, String reason, OnPaymentMade l){
@@ -41,14 +34,11 @@ public class PaymentTask {
         client.setResponseTimeout(120000);
 
 
-        broadcastReceiver = new SmsReceiver();
-        final IntentFilter intentFilter = new IntentFilter();
-
         //ByPasses SSL Certificate due to expired Mobile money Certificate
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
-            sf = new MySSLSocketFactory(trustStore);
+            MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
             sf.setHostnameVerifier(MySSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             client.setSSLSocketFactory(sf);
         }
@@ -67,13 +57,11 @@ public class PaymentTask {
                 pd.setCancelable(true);
                 pd.setCanceledOnTouchOutside(false);
                 pd.show();
-                ctx.registerReceiver(broadcastReceiver, intentFilter, Manifest.permission.RECEIVE_SMS,null);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 msg = reason+" Payment Successful";
-                ctx.unregisterReceiver(broadcastReceiver);
                 listener.onCompleted(response.toString(), msg);
                 pd.dismiss();
             }
@@ -82,7 +70,6 @@ public class PaymentTask {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 msg = reason+" Payment Failed";
-                ctx.unregisterReceiver(broadcastReceiver);
                 listener.onFailure(msg);
                 pd.dismiss();
             }

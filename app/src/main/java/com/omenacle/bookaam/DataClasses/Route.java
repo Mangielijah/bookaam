@@ -9,6 +9,7 @@ public class Route{
     protected String route;
     //Travel Time
     protected String travel_time;
+     private  String r_k;
 
 
     public Route(){
@@ -17,8 +18,8 @@ public class Route{
 
     }
 
-    public Route(String a_k, long price, String route, String travel_time) {
-
+    public Route(String a_k, String r_k, long price, String route, String travel_time) {
+        this.r_k = r_k;
         this.a_k = a_k;
         this.price = price;
         this.route = route;
@@ -58,4 +59,11 @@ public class Route{
         this.travel_time = travel_time;
     }
 
+    public String getR_k() {
+        return r_k;
+    }
+
+    public void setR_k(String r_k) {
+        this.r_k = r_k;
+    }
 }

@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context=".AboutActivity">
 
     <android.support.v7.widget.Toolbar
@@ -29,6 +28,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -52,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:paddingRight="8dp"
                             android:text="@string/app_name_text"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorPrimaryText"
                             android:textSize="17sp" />
 
                         <TextView
@@ -60,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/app_name"
                             android:text="@string/app_name"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorSecondaryText"
                             android:textSize="17sp" />
                     </RelativeLayout>
 
@@ -74,7 +74,7 @@
                             android:layout_height="wrap_content"
                             android:paddingRight="8dp"
                             android:text="@string/website"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorPrimaryText"
                             android:textSize="17sp" />
 
                         <TextView
@@ -82,7 +82,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/website"
                             android:text="@string/www_bookaam_com"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorSecondaryText"
                             android:textSize="17sp" />
                     </RelativeLayout>
 
@@ -96,7 +96,7 @@
                             android:layout_height="wrap_content"
                             android:paddingRight="8dp"
                             android:text="@string/version"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorPrimaryText"
                             android:textSize="17sp" />
 
                         <TextView
@@ -104,7 +104,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/version"
                             android:text="@string/_1_00"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorSecondaryText"
                             android:textSize="17sp" />
                     </RelativeLayout>
 
@@ -118,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:paddingRight="8dp"
                             android:text="@string/developers"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorPrimaryText"
                             android:textSize="17sp" />
 
                         <TextView
@@ -126,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/developers"
                             android:text="@string/omenacle_technology"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorSecondaryText"
                             android:textSize="17sp" />
                     </RelativeLayout>
                 </LinearLayout>
@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="2dp"
                 android:text="@string/about_app_text"
-                android:textColor="@color/white"
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>

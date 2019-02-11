@@ -3,11 +3,11 @@
     <string name="book_tickets">ACHETER DES BILLETS</string>
     <string name="my_tickets">MES BILLETS</string>
     <string name="history">HISTOIRE</string>
-    <string name="reviews">AVIS</string>
+    <string name="reviews">Avis</string>
     <string name="contact_feedback"><![CDATA[CONTACT & FEEDBACK]]></string>
-    <string name="share">PARTAGER</string>
+    <string name="share">Partager</string>
     <string name="faq">FAQ</string>
-    <string name="about_us">A PROPOS DE NOUS</string>
+    <string name="about_us">A propos de nous</string>
     <string name="refund_policy">POLICIE DE REMBOURSMENT</string>
     <string name="log_out">DÉCONNEXION</string>
     <string name="book_your_bus">RESERVEZ VOTRE BUS</string>
@@ -71,7 +71,7 @@
        Les billets réservés ne sont pas remboursables. L’agence n’est pas responsable des retards pouvant entraîner l’incapacité de prendre un bus.
     Une fois que vous payez votre billet.\n<b>NB:</b> Vous ne pourrez monter à bord d\'un bus que lorsque votre billet aura été validé par l\'agence.\n
         Vous ne pouvez reporter votre voyage que pour un jour maximum.</string>
-    <string name="review_app">REVUE DE L\'APP</string>
+    <string name="review_app">Revue de l\'app</string>
     <string name="book_a_classic_bus">RÉSERVER UN BUS CLASSIQUE</string>
     <string name="book_a_vip_bus">RÉSERVER UN BUS VIP</string>
     <string name="saving">Enregistrement</string>
@@ -137,4 +137,15 @@
     <string name="log_user">Connexion en cours, veuillez patienter …</string>
     <string name="log_failed">Échec de la connexion</string>
     <string name="signup_failed">Échec de l\'inscription</string>
+    <string name="incomplete_vip_ticket">Vous n\'avez pas terminé le paiement de votre vip titre de transport.Veuillez suivre la procédure et payer votre titre de transport.</string>
+    <string name="available_seats">Places libres</string>
+    <string name="no_seat">Pas de place disponible pour cet itinéraire</string>
+    <string name="contact_us">Contactez nous</string>
+    <string name="call_us_on_237_672_084_140">Appelez-nous au: +237 672 084 140</string>
+    <string name="email_us_support_bookaam_com">Envoyez-nous un email: support@bookaam.com</string>
+    <string name="send_us_a_message">Envoie-nous un message</string>
+    <string name="enter_a_message">Entrez un message</string>
+    <string name="send">Envoyer</string>
+    <string name="empty_message">S\'il vous plaît entrer un message</string>
+
 </resources>

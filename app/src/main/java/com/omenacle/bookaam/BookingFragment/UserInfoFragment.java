@@ -32,10 +32,6 @@ import com.omenacle.bookaam.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
-
-import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_KEY;
-import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_NAME;
 
 
 /**

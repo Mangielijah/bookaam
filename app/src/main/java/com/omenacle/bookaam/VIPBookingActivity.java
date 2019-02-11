@@ -16,27 +16,13 @@ import android.view.WindowManager;
 import com.omenacle.bookaam.BookingFragment.VIPConfirmFragment;
 import com.omenacle.bookaam.BookingFragment.VIPLocationFragment;
 import com.omenacle.bookaam.BookingFragment.VIPUserInfoFragment;
+import com.omenacle.bookaam.DataClasses.Seats;
 
 import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_KEY;
 import static com.omenacle.bookaam.ListAdapters.AgencyListAdapter.AGENCY_NAME;
 
 
-public class VIPBookingActivity extends AppCompatActivity implements VIPLocationFragment.OnLocationListener, ViewPager.OnPageChangeListener, VIPUserInfoFragment.OnUserInfoListener, VIPConfirmFragment.OnConfirmTicketListener {
-
-    public static  String P_NAME = "P_NAME";
-    public static  String P_NUM = "P_NUM";
-    public static  String P_ID = "P_ID";
-    public static  String PRICE = "PRICE";
-    public static  String ROUTE = "ROUTE";
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentStatePagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+public class VIPBookingActivity extends AppCompatActivity implements VIPLocationFragment.OnLocationListener, ViewPager.OnPageChangeListener, VIPUserInfoFragment.OnUserInfoListener{
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -45,9 +31,11 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
     String agency_name, agency_key, route, passengerName, passengerNumber, passengerId;
     String travelTime, travelDate;
     long  ticketPrice;
+    Seats routeSeats = null;
     //bookaam info
     long bCharge;
     String bEmail, bPass;
+    VIPConfirmFragment cFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +61,22 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentStatePagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.b_viewPager);
+        mViewPager = findViewById(R.id.b_viewPager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(1);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.booking_nav_menu);
+        TabLayout tabLayout = findViewById(R.id.booking_nav_menu);
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -105,12 +101,13 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
 
 
     @Override
-    public void onSendLocation(String location, long fare, String travel_time) {
+    public void onSendLocation(String location, long fare, String travel_time, Seats seats) {
         //Here we have to send the location to the UserInfoFragment
         Log.d("onSendLocation", location);
         this.route = location;
         this.ticketPrice = fare;
         this.travelTime = travel_time;
+        routeSeats = seats;
         mViewPager.setCurrentItem(1);
         VIPUserInfoFragment.newInstance(travel_time);
     }
@@ -128,13 +125,10 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
         bPass = bookaamP;
 
         mViewPager.setCurrentItem(2);
-        VIPConfirmFragment.updateConfirmFragment(passengerName, passengerNumber, passengerId, time, day, bCharge, bEmail, bPass);
+        cFragment.updateConfirmFragment(passengerName, passengerNumber, passengerId, travelTime, travelDate, bCharge, bEmail, bPass, routeSeats);
+        //VIPConfirmFragment.updateConfirmFragment(passengerName, passengerNumber, passengerId, time, day, bCharge, bEmail, bPass);
     }
 
-    @Override
-    public void onBookTicket(String ticketCode) {
-
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -164,12 +158,12 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
 
 
     /**
-     * A {@link FragmentStatePagerAdapter} that returns a fragment corresponding to
+     * A {@link android.support.v4.app.FragmentStatePagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -187,7 +181,7 @@ public class VIPBookingActivity extends AppCompatActivity implements VIPLocation
                     break;
                 case 2:
                     setActionBarTitle(getResources().getString(R.string.confirm_pay));
-                    fragment = VIPConfirmFragment.newInstance(agency_name, agency_key, route, ticketPrice);
+                    fragment = cFragment = VIPConfirmFragment.newInstance(agency_name, agency_key, route, ticketPrice);
                     break;
             }
             return fragment;

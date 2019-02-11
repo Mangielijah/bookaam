@@ -3,11 +3,11 @@
     <string name="book_tickets">BOOK TICKETS</string>
     <string name="my_tickets">MY TICKETS</string>
     <string name="history">HISTORY</string>
-    <string name="reviews">REVIEWS</string>
+    <string name="reviews">Reviews</string>
     <string name="contact_feedback"><![CDATA[CONTACT & FEEDBACK]]></string>
-    <string name="share">SHARE</string>
+    <string name="share">Share</string>
     <string name="faq">FAQ</string>
-    <string name="about_us">ABOUT US</string>
+    <string name="about_us">About us</string>
     <string name="refund_policy">REFUND POLICY</string>
     <string name="log_out">LOG OUT</string>
     <string name="book_your_bus">BOOK YOUR BUS</string>
@@ -70,7 +70,7 @@
     <string name="disclaimer_text">
         Tickets booked are non refundable. The agency is not responsible for lateness that may result in failure to board a bus once you pay for your ticket.\n<b>NB:</b> You shall only be allowed to board a bus when your ticket is validated by the agency.\n
         You can only postpone your ticket for not more than 1 day.</string>
-    <string name="review_app">REVIEW APP</string>
+    <string name="review_app">Review app</string>
     <string name="book_a_classic_bus">BOOK A CLASSIC BUS</string>
     <string name="book_a_vip_bus">BOOK A VIP BUS</string>
     <string name="saving">Saving</string>
@@ -122,7 +122,7 @@
     <string name="welcome_desc">Take time to learn how to book your ticket from home</string>
     <string name="no_idcard">No id card</string>
     <string name="momonumber_error">Please enter momo number</string>
-    <string name="incomplete_ticket">You have not completed payment for your travel ticket.Please follow the process and pay for your transport fare.</string>
+    <string name="incomplete_ticket">You have not completed payment for your classic travel ticket.Please follow the process and pay for your transport fare.</string>
     <string name="trans_dialog">Platform charge payment completed.\nClick continue to pay your transport fare </string>
     <string name="completed">Completed</string>
     <string name="completed_text">Payment completed. go back and check your ticket under my tickets</string>
@@ -137,4 +137,14 @@
     <string name="log_user">Login in please wait…</string>
     <string name="log_failed">Login failed</string>
     <string name="signup_failed">Failed to sign up</string>
+    <string name="incomplete_vip_ticket">You have not completed payment for your vip travel ticket.Please follow the process and pay for your transport fare.</string>
+    <string name="available_seats">Available seats</string>
+    <string name="no_seat">No available seat for this route</string>
+    <string name="contact_us">Contact us</string>
+    <string name="call_us_on_237_672_084_140">Call us on: +237 672 084 140</string>
+    <string name="email_us_support_bookaam_com">Email us: support@bookaam.com</string>
+    <string name="send_us_a_message">Send us a message</string>
+    <string name="enter_a_message">Enter a message</string>
+    <string name="send">Send</string>
+    <string name="empty_message">Please enter a message</string>
 </resources>
